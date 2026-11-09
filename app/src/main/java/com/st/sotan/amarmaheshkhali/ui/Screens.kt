@@ -1,0 +1,421 @@
+package com.st.sotan.amarmaheshkhali.ui
+
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.st.sotan.amarmaheshkhali.AppViewModel
+import com.st.sotan.amarmaheshkhali.data.CATEGORIES
+import com.st.sotan.amarmaheshkhali.data.Seeder
+import com.st.sotan.amarmaheshkhali.data.UNIONS
+import com.st.sotan.amarmaheshkhali.data.categoryName
+import com.st.sotan.amarmaheshkhali.data.unionName
+
+// ---------------------------------------------------------------- List
+@Composable
+fun ListScreen(
+    vm: AppViewModel,
+    cat: String,
+    unionId: String,
+    onOpen: (String) -> Unit,
+    onBack: () -> Unit
+) {
+    val lang by vm.lang.collectAsState()
+    val items by vm.results.collectAsState()
+
+    LaunchedEffect(cat, unionId) {
+        vm.query.value = ""
+        vm.category.value = cat
+        vm.union.value = unionId
+    }
+
+    val title = when {
+        cat.isNotEmpty() -> categoryName(cat, lang)
+        unionId.isNotEmpty() -> unionName(unionId, lang)
+        else -> tr("সব তথ্য", "All Records")
+    }
+
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(title, onBack)
+        if (items.isEmpty()) {
+            EmptyState(
+                tr(
+                    "এই বিভাগের তথ্য এখনও যাচাই করে যুক্ত করা হয়নি।",
+                    "Information for this section has not been verified and added yet."
+                )
+            )
+        } else {
+            LazyColumn(contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 8.dp)) {
+                items(items, key = { it.recordId }) { r ->
+                    RecordCard(r, lang) { onOpen(r.recordId) }
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------------- Detail
+@Composable
+fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
+    val lang by vm.lang.collectAsState()
+    val record by vm.record(id).collectAsState(initial = null)
+    val context = LocalContext.current
+
+    LaunchedEffect(id) { vm.markViewed(id) }
+
+    Column(Modifier.fillMaxSize()) {
+        val r = record
+        AppTopBar(
+            if (r == null) "" else if (lang == "bn") r.banglaName else r.englishName,
+            onBack
+        )
+        if (r != null) {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    StatusBadge(r.verificationStatus)
+                    Spacer(Modifier.weight(1f))
+                    IconButton(onClick = { vm.toggleFavourite(r) }) {
+                        Icon(
+                            if (r.isFavourite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = tr("প্রিয়", "Favourite"),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    if (lang == "bn") r.descriptionBn else r.descriptionEn,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Spacer(Modifier.height(16.dp))
+
+                InfoRow(tr("বাংলা নাম", "Bangla Name"), r.banglaName)
+                InfoRow(tr("ইংরেজি নাম", "English Name"), r.englishName)
+                InfoRow(tr("বিভাগ", "Category"), categoryName(r.category, lang))
+                InfoRow(tr("ইউনিয়ন", "Union"), unionName(r.unionId, lang))
+                InfoRow(tr("ওয়ার্ড", "Ward"), r.ward)
+                InfoRow(tr("গ্রাম", "Village"), r.village)
+                InfoRow(tr("ঠিকানা", "Address"), r.address)
+                InfoRow(tr("ফোন", "Phone"), r.phone)
+                if (r.latitude != null && r.longitude != null) {
+                    InfoRow(tr("অবস্থান", "Location"), "${r.latitude}, ${r.longitude}")
+                }
+                InfoRow(tr("সরকারি উৎস", "Official Source"), r.officialSource)
+                InfoRow(tr("আপডেট", "Last Updated"), r.lastUpdated)
+
+                if (r.phone.isNotBlank()) {
+                    Spacer(Modifier.height(12.dp))
+                    Button(onClick = {
+                        context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + r.phone)))
+                    }) {
+                        Icon(Icons.Default.Call, contentDescription = null)
+                        Spacer(Modifier.padding(horizontal = 4.dp))
+                        Text(tr("ডায়াল করুন", "Dial"))
+                    }
+                }
+                if (r.verificationStatus != "VERIFIED") {
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        tr(
+                            "সতর্কতা: এই তথ্য সরকারি উৎস থেকে যাচাই হয়নি। ব্যবহারের আগে নিশ্চিত হয়ে নিন।",
+                            "Notice: this information is not verified against an official source. Please confirm before relying on it."
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------------- Search
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchScreen(vm: AppViewModel, onOpen: (String) -> Unit) {
+    val lang by vm.lang.collectAsState()
+    val q by vm.query.collectAsState()
+    val cat by vm.category.collectAsState()
+    val un by vm.union.collectAsState()
+    val items by vm.results.collectAsState()
+    val recent by vm.recent.collectAsState()
+
+    LaunchedEffect(Unit) {
+        vm.category.value = ""
+        vm.union.value = ""
+    }
+
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(tr("অফলাইন সার্চ", "Offline Search"))
+        OutlinedTextField(
+            value = q,
+            onValueChange = { vm.query.value = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            singleLine = true,
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            trailingIcon = {
+                if (q.isNotEmpty()) {
+                    IconButton(onClick = { vm.query.value = "" }) {
+                        Icon(Icons.Default.Clear, contentDescription = tr("মুছুন", "Clear"))
+                    }
+                }
+            },
+            placeholder = { Text(tr("নাম বা বিবরণ লিখুন", "Type a name or description")) },
+            shape = RoundedCornerShape(50)
+        )
+
+        Text(
+            tr("বিভাগ", "Category"),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.labelLarge
+        )
+        LazyRow(
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(CATEGORIES) { c ->
+                FilterChip(
+                    selected = cat == c.id,
+                    onClick = { vm.category.value = if (cat == c.id) "" else c.id },
+                    label = { Text(if (lang == "bn") c.bn else c.en) }
+                )
+            }
+        }
+        Text(
+            tr("ইউনিয়ন", "Union"),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            style = MaterialTheme.typography.labelLarge
+        )
+        LazyRow(
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(UNIONS) { u ->
+                FilterChip(
+                    selected = un == u.id,
+                    onClick = { vm.union.value = if (un == u.id) "" else u.id },
+                    label = { Text(if (lang == "bn") u.bn else u.en) }
+                )
+            }
+        }
+
+        Spacer(Modifier.height(8.dp))
+        if (items.isEmpty()) {
+            EmptyState(tr("কিছু পাওয়া যায়নি।", "No results found."))
+        } else {
+            LazyColumn {
+                if (q.isEmpty() && cat.isEmpty() && un.isEmpty() && recent.isNotEmpty()) {
+                    item {
+                        Text(
+                            tr("সম্প্রতি দেখা", "Recently viewed"),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    items(recent, key = { "recent-" + it.recordId }) { r ->
+                        RecordCard(r, lang) { onOpen(r.recordId) }
+                    }
+                    item {
+                        Text(
+                            tr("সব তথ্য", "All records"),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                items(items, key = { it.recordId }) { r ->
+                    RecordCard(r, lang) { onOpen(r.recordId) }
+                }
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------- Favourites
+@Composable
+fun FavouritesScreen(vm: AppViewModel, onOpen: (String) -> Unit) {
+    val lang by vm.lang.collectAsState()
+    val favs by vm.favourites.collectAsState()
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(tr("প্রিয় তথ্য", "Favourite Information"))
+        if (favs.isEmpty()) {
+            EmptyState(
+                tr(
+                    "এখনও কোনো প্রিয় তথ্য নেই। কোনো তথ্যের পাতায় হার্ট আইকনে চাপ দিন।",
+                    "No favourites yet. Tap the heart icon on a record."
+                )
+            )
+        } else {
+            LazyColumn(contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 8.dp)) {
+                items(favs, key = { it.recordId }) { r -> RecordCard(r, lang) { onOpen(r.recordId) } }
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------ Settings
+@Composable
+fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit) {
+    val lang by vm.lang.collectAsState()
+    val theme by vm.theme.collectAsState()
+
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(tr("সেটিংস", "Settings"))
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+        ) {
+            SettingTitle(tr("ভাষা", "Language"))
+            RadioRow("বাংলা", lang == "bn") { vm.setLang("bn") }
+            RadioRow("English", lang == "en") { vm.setLang("en") }
+
+            Spacer(Modifier.height(16.dp))
+            SettingTitle(tr("থিম", "Theme"))
+            RadioRow(tr("সিস্টেম অনুযায়ী", "Follow system"), theme == "system") { vm.setTheme("system") }
+            RadioRow(tr("লাইট", "Light"), theme == "light") { vm.setTheme("light") }
+            RadioRow(tr("ডার্ক", "Dark"), theme == "dark") { vm.setTheme("dark") }
+
+            Spacer(Modifier.height(16.dp))
+            SettingTitle(tr("অ্যাপ তথ্য", "App Information"))
+            InfoRow(tr("অ্যাপ", "App"), "AMAR MOHESHKHALI A TO Z")
+            InfoRow(tr("ডেভেলপার", "Developer"), "ST SOTAN")
+            InfoRow(tr("ডেটা সংস্করণ", "Data Version"), Seeder.DATA_VERSION)
+            InfoRow(tr("সর্বশেষ আপডেট", "Last Updated"), Seeder.DATA_DATE)
+            InfoRow(
+                tr("অফলাইন মোড", "Offline Mode"),
+                tr(
+                    "অ্যাপের সব তথ্য ফোনেই সংরক্ষিত। ইন্টারনেট লাগে না।",
+                    "All data is stored on your phone. No internet is needed."
+                )
+            )
+            InfoRow(
+                tr("গোপনীয়তা", "Privacy"),
+                tr(
+                    "কোনো লগইন নেই, কোনো ব্যক্তিগত তথ্য সংগ্রহ বা পাঠানো হয় না। অ্যাপে ইন্টারনেটের অনুমতিই নেই।",
+                    "No login. No personal data is collected or sent. The app has no internet permission."
+                )
+            )
+            Spacer(Modifier.height(12.dp))
+            Button(onClick = onAbout) { Text(tr("অ্যাপ সম্পর্কে", "About the app")) }
+        }
+    }
+}
+
+@Composable
+private fun SettingTitle(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary
+    )
+}
+
+@Composable
+private fun RadioRow(label: String, selected: Boolean, onSelect: () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .selectable(selected = selected, onClick = onSelect, role = Role.RadioButton)
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(selected = selected, onClick = null)
+        Spacer(Modifier.padding(horizontal = 6.dp))
+        Text(label)
+    }
+}
+
+// --------------------------------------------------------------- About
+@Composable
+fun AboutScreen(onBack: () -> Unit) {
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(tr("অ্যাপ সম্পর্কে", "About"), onBack)
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+        ) {
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        "AMAR MOHESHKHALI A TO Z",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        "Developed By: ST SOTAN",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+            Text(
+                tr(
+                    "এটি কক্সবাজার জেলার মহেশখালী উপজেলার একটি অফলাইন ডিজিটাল তথ্যভান্ডার।\n\n" +
+                        "তথ্যের নীতি: কোনো তথ্য বানিয়ে লেখা হয় না। প্রতিটি রেকর্ডে যাচাইয়ের অবস্থা (VERIFIED, PENDING, HISTORICAL, INFORMATION UNAVAILABLE) এবং উৎস দেখানো হয়।\n\n" +
+                        "রাজনৈতিক তথ্য নিরপেক্ষভাবে উপস্থাপন করা হবে; কোনো দল, প্রার্থী বা ব্যক্তির প্রচার করা হয় না।\n\n" +
+                        "তথ্য হালনাগাদ করতে ভবিষ্যতে নতুন ডেটা প্যাকেজ বা অ্যাপ সংস্করণ ব্যবহার করা হবে।",
+                    "This is an offline digital information encyclopedia for Maheshkhali Upazila, Cox's Bazar.\n\n" +
+                        "Data policy: nothing is invented. Every record shows its verification status (VERIFIED, PENDING, HISTORICAL, INFORMATION UNAVAILABLE) and source.\n\n" +
+                        "Political information is presented neutrally; no party, candidate or person is promoted.\n\n" +
+                        "Updates will arrive as new data packages or app versions."
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
