@@ -1,14 +1,25 @@
 [
  {
   "id": "intro-upazila",
-  "bn": "মহেশখালী উপজেলা",
-  "en": "Maheshkhali Upazila",
+  "bn": "আমাদের মহেশখালী",
+  "en": "Our Maheshkhali",
   "cat": "introduction",
   "status": "PENDING",
   "updated": "2026-11-09",
-  "source": "অনুসন্ধান বাকি / To be verified with official source",
-  "descBn": "মহেশখালী বাংলাদেশের কক্সবাজার জেলার একটি উপজেলা। বিস্তারিত পরিচিতি যাচাই শেষে যুক্ত হবে।",
-  "descEn": "Maheshkhali is an upazila of Cox's Bazar District, Bangladesh. A detailed introduction will be added after verification."
+  "source": "অ্যাপ নির্মাতা (ST SOTAN) প্রদত্ত বর্ণনা; সরকারি উৎসে যাচাই বাকি",
+  "descBn": "মহেশখালী বাংলাদেশের কক্সবাজার জেলার একটি ঐতিহ্যবাহী ও প্রাকৃতিক সৌন্দর্যে ঘেরা দ্বীপ উপজেলা। পাহাড়, সমুদ্র, নদী, সবুজ বনভূমি এবং মনোমুগ্ধকর প্রাকৃতিক পরিবেশে গড়ে উঠেছে আমাদের প্রিয় মহেশখালী।\n\nবাংলাদেশের একমাত্র পাহাড়ি দ্বীপ হিসেবে মহেশখালীর রয়েছে বিশেষ পরিচিতি। এই দ্বীপের অন্যতম ঐতিহাসিক নিদর্শন আদিনাথ মন্দির, যা মৈনাক পাহাড়ের চূড়ায় অবস্থিত। এছাড়াও রয়েছে অপরূপ সৌন্দর্যের সোনাদিয়া দ্বীপ, বিস্তীর্ণ লবণ মাঠ, সমুদ্রসৈকত এবং বিভিন্ন দর্শনীয় স্থান।\n\nমহেশখালীর মানুষের প্রধান জীবিকার মধ্যে রয়েছে লবণ উৎপাদন, মৎস্য আহরণ, পান চাষ, কৃষি ও ব্যবসা-বাণিজ্য। এখানকার মানুষের জীবনযাত্রা, ভাষা, সংস্কৃতি, ঐতিহ্য ও আন্তরিকতা এই দ্বীপকে দিয়েছে স্বতন্ত্র পরিচয়।\n\nআমাদের মহেশখালী শুধু একটি ভৌগোলিক স্থান নয়; এটি আমাদের শিকড়, আমাদের আবেগ, আমাদের ইতিহাস এবং ভালোবাসার ঠিকানা। এই দ্বীপের প্রতিটি গ্রাম, পাহাড়, নদী ও সমুদ্রের সঙ্গে জড়িয়ে আছে অসংখ্য স্মৃতি ও মানুষের জীবনসংগ্রামের গল্প।",
+  "descEn": "Maheshkhali is a traditional island upazila of Cox's Bazar District, Bangladesh, surrounded by natural beauty: hills, sea, rivers and green forests.\n\nIt is known as the only hilly island of Bangladesh. One of its notable historic sites is the Adinath Temple, on top of the Mainak hill. The island also has the beautiful Sonadia Island, wide salt fields, sea beaches and many other places to visit.\n\nThe main livelihoods of the people include salt production, fishing, betel leaf cultivation, agriculture and trade. Their way of life, language, culture, heritage and warmth give the island its distinct identity.\n\nOur Maheshkhali is not just a place on the map; it is our roots, our emotion, our history and our home. Every village, hill, river and stretch of sea here is tied to countless memories and stories of people's struggle for life."
+ },
+ {
+  "id": "intro-initiative",
+  "bn": "আমাদের উদ্যোগ — AMAR MOHESHKHALI A TO Z",
+  "en": "Our Initiative — AMAR MOHESHKHALI A TO Z",
+  "cat": "introduction",
+  "status": "PENDING",
+  "updated": "2026-11-09",
+  "source": "অ্যাপ নির্মাতা (ST SOTAN) প্রদত্ত বর্ণনা; সরকারি উৎসে যাচাই বাকি",
+  "descBn": "মহেশখালীর প্রতিটি গুরুত্বপূর্ণ তথ্য ও প্রয়োজনীয় সেবা মানুষের হাতের মুঠোয় পৌঁছে দেওয়ার লক্ষ্য নিয়ে তৈরি করা হয়েছে AMAR MOHESHKHALI A TO Z।\n\nএই অ্যাপের মাধ্যমে মহেশখালীর ইতিহাস, ঐতিহ্য, দর্শনীয় স্থান, ইউনিয়ন ও গ্রাম, শিক্ষা প্রতিষ্ঠান, হাসপাতাল, স্বাস্থ্যসেবা, যোগাযোগ ব্যবস্থা, জরুরি নম্বর, স্থানীয় ব্যবসা এবং প্রয়োজনীয় তথ্য সহজে খুঁজে পাওয়া যাবে।\n\nআমাদের লক্ষ্য একটি আধুনিক ডিজিটাল মহেশখালী গড়ে তোলার পথে তথ্য ও প্রযুক্তির মাধ্যমে মানুষের পাশে থাকা।\n\nমহেশখালী আমাদের পরিচয়, মহেশখালী আমাদের অহংকার।\nআমাদের দ্বীপ, আমাদের ভালোবাসা।",
+  "descEn": "AMAR MOHESHKHALI A TO Z was created to put every important piece of information and essential service about Maheshkhali in people's hands.\n\nThrough this app you can easily find Maheshkhali's history, heritage, places to visit, unions and villages, educational institutions, hospitals, healthcare, transport, emergency numbers, local businesses and other useful information.\n\nOur goal is to stand by the people with information and technology on the way to building a modern, digital Maheshkhali.\n\nMaheshkhali is our identity, Maheshkhali is our pride.\nOur island, our love."
  },
  {
   "id": "union-bara-maheshkhali",

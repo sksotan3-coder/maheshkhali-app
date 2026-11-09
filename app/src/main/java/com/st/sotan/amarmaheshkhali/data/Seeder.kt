@@ -7,18 +7,21 @@ import org.json.JSONObject
 /** Loads the bundled records (assets/seed/records.json) into Room on first launch. */
 object Seeder {
 
-    const val DATA_VERSION = "0.1.0-seed"
+    const val DATA_VERSION = "0.1.1-seed"
     const val DATA_DATE = "2026-11-09"
 
     suspend fun seedIfEmpty(context: Context, dao: RecordDao) {
-        if (dao.count() > 0) return
+        val prefs = context.getSharedPreferences("settings", 0)
+        if (dao.count() > 0 && prefs.getString("data_version", "") == DATA_VERSION) return
         val text = context.assets.open("seed/records.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
         val arr = JSONArray(text)
         val list = ArrayList<RecordEntity>(arr.length())
         for (i in 0 until arr.length()) {
             list.add(parse(arr.getJSONObject(i)))
         }
-        dao.insertAll(list)
+        val favs = dao.favouriteIds()
+        dao.upsertAll(list.map { if (it.recordId in favs) it.copy(isFavourite = true) else it })
+        prefs.edit().putString("data_version", DATA_VERSION).apply()
     }
 
     private fun parse(o: JSONObject) = RecordEntity(

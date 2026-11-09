@@ -42,6 +42,12 @@ interface RecordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(items: List<RecordEntity>)
 
+    @Query("SELECT recordId FROM records WHERE isFavourite = 1")
+    suspend fun favouriteIds(): List<String>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertAll(items: List<RecordEntity>)
+
     @Query("UPDATE records SET isFavourite = :value WHERE recordId = :id")
     suspend fun setFavourite(id: String, value: Boolean)
 
