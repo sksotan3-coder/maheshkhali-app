@@ -24,7 +24,7 @@ val CATEGORIES = listOf(
     CategoryInfo("government_offices", "সরকারি অফিস", "Government Offices"),
     CategoryInfo("education", "শিক্ষা ডিরেক্টরি", "Education Directory"),
     CategoryInfo("healthcare", "হাসপাতাল ও স্বাস্থ্যসেবা", "Hospital and Healthcare Directory"),
-    CategoryInfo("emergency", "জরুরি সেবা", "Emergency Services"),
+    CategoryInfo("emergency", "জরুরি যোগাযোগ", "Emergency Contacts"),
     CategoryInfo("tourism", "পর্যটন ও ভ্রমণ গাইড", "Tourism and Travel Guide"),
     CategoryInfo("adinath_temple", "আদিনাথ মন্দির", "Adinath Temple"),
     CategoryInfo("sonadia_island", "সোনাদিয়া দ্বীপ", "Sonadia Island"),

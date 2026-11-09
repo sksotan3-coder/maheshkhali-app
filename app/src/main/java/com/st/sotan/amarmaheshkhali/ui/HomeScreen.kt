@@ -148,7 +148,7 @@ fun HomeScreen(
                         .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    QuickCard(tr("জরুরি সেবা", "Emergency"), Modifier.weight(1f)) { onCategory("emergency") }
+                    QuickCard(tr("জরুরি যোগাযোগ", "Emergency"), Modifier.weight(1f)) { onCategory("emergency") }
                     QuickCard(tr("সরকারি সেবা", "Government"), Modifier.weight(1f)) { onCategory("government_offices") }
                     QuickCard(tr("পর্যটন", "Tourism"), Modifier.weight(1f)) { onCategory("tourism") }
                 }

@@ -20,6 +20,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
@@ -29,6 +32,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -140,21 +144,18 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                 InfoRow(tr("ওয়ার্ড", "Ward"), r.ward)
                 InfoRow(tr("গ্রাম", "Village"), r.village)
                 InfoRow(tr("ঠিকানা", "Address"), r.address)
-                InfoRow(tr("ফোন", "Phone"), r.phone)
                 if (r.latitude != null && r.longitude != null) {
                     InfoRow(tr("অবস্থান", "Location"), "${r.latitude}, ${r.longitude}")
                 }
                 InfoRow(tr("সরকারি উৎস", "Official Source"), r.officialSource)
                 InfoRow(tr("আপডেট", "Last Updated"), r.lastUpdated)
 
-                if (r.phone.isNotBlank()) {
+                val contacts = parseContacts(r.phone)
+                if (contacts.isNotEmpty()) {
                     Spacer(Modifier.height(12.dp))
-                    Button(onClick = {
-                        context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + r.phone)))
-                    }) {
-                        Icon(Icons.Default.Call, contentDescription = null)
-                        Spacer(Modifier.padding(horizontal = 4.dp))
-                        Text(tr("ডায়াল করুন", "Dial"))
+                    SectionLabel(tr("যোগাযোগ", "Contact"))
+                    contacts.forEach { c ->
+                        ContactButton(c, lang) { openContact(context, c) }
                     }
                 }
                 if (r.verificationStatus != "VERIFIED") {
@@ -417,5 +418,65 @@ fun AboutScreen(onBack: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+}
+
+// ------------------------------------------------------------ Contacts
+/** Contact line format stored in RecordEntity.phone: "call|label|number", "mail|label|email", "web|label|url". */
+data class Contact(val type: String, val label: String, val value: String)
+
+fun parseContacts(raw: String): List<Contact> =
+    raw.lines().mapNotNull { line ->
+        val p = line.split("|", limit = 3)
+        if (p.size == 3 && p[2].isNotBlank()) Contact(p[0].trim(), p[1].trim(), p[2].trim()) else null
+    }
+
+private fun toBanglaDigits(s: String): String =
+    s.map { if (it in '0'..'9') ('\u09E6' + (it - '0')) else it }.joinToString("")
+
+private fun openContact(context: android.content.Context, c: Contact) {
+    val uri = when (c.type) {
+        "call" -> Uri.parse("tel:" + c.value.filter { it.isDigit() || it == '+' })
+        "mail" -> Uri.parse("mailto:" + c.value)
+        else -> Uri.parse(c.value)
+    }
+    val action = if (c.type == "call") Intent.ACTION_DIAL else Intent.ACTION_VIEW
+    try {
+        context.startActivity(Intent(action, uri))
+    } catch (e: Exception) {
+        // No app can handle it; do nothing.
+    }
+}
+
+@Composable
+private fun SectionLabel(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary
+    )
+    Spacer(Modifier.height(6.dp))
+}
+
+@Composable
+private fun ContactButton(c: Contact, lang: String, onClick: () -> Unit) {
+    val icon = when (c.type) {
+        "call" -> Icons.Default.Call
+        "mail" -> Icons.Default.Email
+        else -> if (c.value.contains("maps")) Icons.Default.Place else Icons.Default.Info
+    }
+    val shown = if (c.type == "call" || c.type == "mail") {
+        c.label + ": " + (if (lang == "bn" && c.type == "call") toBanglaDigits(c.value) else c.value)
+    } else c.label
+    val content: @Composable () -> Unit = {
+        Icon(icon, contentDescription = null)
+        Spacer(Modifier.padding(horizontal = 4.dp))
+        Text(shown)
+    }
+    if (c.type == "call") {
+        Button(onClick = onClick, modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) { content() }
+    } else {
+        OutlinedButton(onClick = onClick, modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) { content() }
     }
 }
