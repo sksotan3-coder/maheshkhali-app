@@ -105,24 +105,6 @@ fun HomeScreen(
                 }
             }
 
-            // Data notice
-            item {
-                Row(
-                    Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Default.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.padding(horizontal = 6.dp))
-                    Text(
-                        tr(
-                            "অধিকাংশ তথ্য এখনও যাচাই বাকি (PENDING)। যাচাই ছাড়া কোনো তথ্য সঠিক বলে দেখানো হয় না।",
-                            "Most information is still PENDING verification. Nothing is shown as correct without verification."
-                        ),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-
             // Unions
             item { SectionTitle(tr("ইউনিয়ন", "Unions")) }
             item {

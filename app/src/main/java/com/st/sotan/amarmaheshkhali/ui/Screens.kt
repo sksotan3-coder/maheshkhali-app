@@ -120,7 +120,6 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     .padding(16.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    StatusBadge(r.verificationStatus)
                     Spacer(Modifier.weight(1f))
                     IconButton(onClick = { vm.toggleFavourite(r) }) {
                         Icon(
@@ -137,9 +136,6 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                 )
                 Spacer(Modifier.height(16.dp))
 
-                InfoRow(tr("বাংলা নাম", "Bangla Name"), r.banglaName)
-                InfoRow(tr("ইংরেজি নাম", "English Name"), r.englishName)
-                InfoRow(tr("বিভাগ", "Category"), categoryName(r.category, lang))
                 InfoRow(tr("ইউনিয়ন", "Union"), unionName(r.unionId, lang))
                 InfoRow(tr("ওয়ার্ড", "Ward"), r.ward)
                 InfoRow(tr("গ্রাম", "Village"), r.village)
@@ -147,8 +143,6 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                 if (r.latitude != null && r.longitude != null) {
                     InfoRow(tr("অবস্থান", "Location"), "${r.latitude}, ${r.longitude}")
                 }
-                InfoRow(tr("সরকারি উৎস", "Official Source"), r.officialSource)
-                InfoRow(tr("আপডেট", "Last Updated"), r.lastUpdated)
 
                 val contacts = parseContacts(r.phone)
                 if (contacts.isNotEmpty()) {
@@ -157,17 +151,6 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     contacts.forEach { c ->
                         ContactButton(c, lang) { openContact(context, c) }
                     }
-                }
-                if (r.verificationStatus != "VERIFIED") {
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        tr(
-                            "সতর্কতা: এই তথ্য সরকারি উৎস থেকে যাচাই হয়নি। ব্যবহারের আগে নিশ্চিত হয়ে নিন।",
-                            "Notice: this information is not verified against an official source. Please confirm before relying on it."
-                        ),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
                 }
             }
         }

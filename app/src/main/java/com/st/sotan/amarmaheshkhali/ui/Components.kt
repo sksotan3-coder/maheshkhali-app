@@ -108,8 +108,6 @@ fun RecordCard(r: RecordEntity, lang: String, onClick: () -> Unit) {
                     Text("•", color = MaterialTheme.colorScheme.primary)
                     Text(unionName(r.unionId, lang), style = MaterialTheme.typography.labelMedium)
                 }
-                Spacer(Modifier.weight(1f))
-                StatusBadge(r.verificationStatus)
             }
         }
     }
