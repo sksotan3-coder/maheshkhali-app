@@ -17,6 +17,20 @@ jobs:
         with:
           gradle-version: 8.9
       - run: gradle assembleDebug --stacktrace
+      - name: Build signed AAB (only if signing secrets exist)
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+            KEYSTORE_FILE="$RUNNER_TEMP/upload.jks" gradle bundleRelease --stacktrace
+            cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
+          else
+            echo "No signing secrets; skipping AAB"
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: AmarMoheshkhali-APK
@@ -27,4 +41,5 @@ jobs:
         run: |
           cp app/build/outputs/apk/debug/app-debug.apk AmarMoheshkhali.apk
           gh release delete latest --yes --cleanup-tag || true
-          gh release create latest AmarMoheshkhali.apk --title "AmarMoheshkhali APK" --notes "Debug APK built automatically" --target ${{ github.sha }}
+          FILES="AmarMoheshkhali.apk"; [ -f AmarMoheshkhali.aab ] && FILES="$FILES AmarMoheshkhali.aab"
+          gh release create latest $FILES --title "AmarMoheshkhali APK" --notes "Debug APK built automatically" --target ${{ github.sha }}
