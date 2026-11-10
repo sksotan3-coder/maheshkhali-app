@@ -7,7 +7,7 @@ import org.json.JSONObject
 /** Loads the bundled records (assets/seed/records.json) into Room on first launch. */
 object Seeder {
 
-    const val DATA_VERSION = "0.3.1-seed"
+    const val DATA_VERSION = "0.3.2-seed"
     const val DATA_DATE = "2026-11-09"
 
     suspend fun seedIfEmpty(context: Context, dao: RecordDao) {
