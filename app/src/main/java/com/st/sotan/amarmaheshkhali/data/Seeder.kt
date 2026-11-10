@@ -7,7 +7,7 @@ import org.json.JSONObject
 /** Loads the bundled records (assets/seed/records.json) into Room on first launch. */
 object Seeder {
 
-    const val DATA_VERSION = "0.2.3-seed"
+    const val DATA_VERSION = "0.3.0-seed"
     const val DATA_DATE = "2026-11-09"
 
     suspend fun seedIfEmpty(context: Context, dao: RecordDao) {
@@ -20,6 +20,7 @@ object Seeder {
             list.add(parse(arr.getJSONObject(i)))
         }
         val favs = dao.favouriteIds()
+        dao.deleteNotIn(list.map { it.recordId })
         dao.upsertAll(list.map { if (it.recordId in favs) it.copy(isFavourite = true) else it })
         prefs.edit().putString("data_version", DATA_VERSION).apply()
     }

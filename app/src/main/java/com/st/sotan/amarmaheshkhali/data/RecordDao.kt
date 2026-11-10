@@ -45,6 +45,9 @@ interface RecordDao {
     @Query("SELECT recordId FROM records WHERE isFavourite = 1")
     suspend fun favouriteIds(): List<String>
 
+    @Query("DELETE FROM records WHERE recordId NOT IN (:ids)")
+    suspend fun deleteNotIn(ids: List<String>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(items: List<RecordEntity>)
 
