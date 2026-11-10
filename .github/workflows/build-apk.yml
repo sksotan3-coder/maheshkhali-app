@@ -32,15 +32,16 @@ jobs:
           fi
           gradle assembleRelease bundleRelease --stacktrace
           cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
+          find app/build/outputs -type f | sort
+          cp "$(find app/build/outputs/apk/release -name '*.apk' | head -1)" AmarMoheshkhali.apk
       - uses: actions/upload-artifact@v4
         with:
           name: AmarMoheshkhali-APK
-          path: app/build/outputs/apk/release/app-release.apk
+          path: AmarMoheshkhali.apk
       - name: Publish APK to Releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cp app/build/outputs/apk/release/app-release.apk AmarMoheshkhali.apk
           gh release delete latest --yes --cleanup-tag || true
           FILES="AmarMoheshkhali.apk"; [ -f AmarMoheshkhali.aab ] && FILES="$FILES AmarMoheshkhali.aab"
           gh release create latest $FILES --title "AmarMoheshkhali APK" --notes "Signed APK and AAB built automatically" --target ${{ github.sha }}
