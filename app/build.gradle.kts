@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.st.sotan.amarmaheshkhali"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.st.sotan.amarmaheshkhali"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
         versionName = "0.3.0"
     }

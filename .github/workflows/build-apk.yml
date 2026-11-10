@@ -15,9 +15,9 @@ jobs:
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.9
+          gradle-version: 8.11.1
       - run: gradle assembleDebug --stacktrace
-      - name: Build signed AAB (only if signing secrets exist)
+      - name: Build signed AAB
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -26,11 +26,13 @@ jobs:
         run: |
           if [ -n "$KEYSTORE_B64" ]; then
             echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            KEYSTORE_FILE="$RUNNER_TEMP/upload.jks" gradle bundleRelease --stacktrace
-            cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
+            export KEYSTORE_FILE="$RUNNER_TEMP/upload.jks"
           else
-            echo "No signing secrets; skipping AAB"
+            export KEYSTORE_FILE="$GITHUB_WORKSPACE/signing/upload.jks"
+            export KEYSTORE_PASSWORD="9NYIYkOTbuop8Yx4X3mR" KEY_ALIAS="upload" KEY_PASSWORD="9NYIYkOTbuop8Yx4X3mR"
           fi
+          gradle bundleRelease --stacktrace
+          cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
       - uses: actions/upload-artifact@v4
         with:
           name: AmarMoheshkhali-APK
