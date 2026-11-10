@@ -84,7 +84,7 @@ fun ListScreen(
         if (items.isEmpty()) {
             EmptyState(
                 tr(
-                    "এই বিভাগের তথ্য এখনও যাচাই করে যুক্ত করা হয়নি।",
+                    "এই বিভাগে এখনও কোনো তথ্য যুক্ত করা হয়নি।",
                     "Information for this section has not been verified and added yet."
                 )
             )
@@ -130,10 +130,10 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                Text(
-                    if (lang == "bn") r.descriptionBn else r.descriptionEn,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                val desc = if (lang == "bn") r.descriptionBn else r.descriptionEn
+                if (desc.isNotBlank()) {
+                    Text(desc, style = MaterialTheme.typography.bodyLarge)
+                }
                 Spacer(Modifier.height(16.dp))
 
                 InfoRow(tr("ইউনিয়ন", "Union"), unionName(r.unionId, lang))
@@ -390,11 +390,11 @@ fun AboutScreen(onBack: () -> Unit) {
             Text(
                 tr(
                     "এটি কক্সবাজার জেলার মহেশখালী উপজেলার একটি অফলাইন ডিজিটাল তথ্যভান্ডার।\n\n" +
-                        "তথ্যের নীতি: কোনো তথ্য বানিয়ে লেখা হয় না। প্রতিটি রেকর্ডে যাচাইয়ের অবস্থা (VERIFIED, PENDING, HISTORICAL, INFORMATION UNAVAILABLE) এবং উৎস দেখানো হয়।\n\n" +
+                        "তথ্যের নীতি: কোনো তথ্য বানিয়ে লেখা হয় না। \n\n" +
                         "রাজনৈতিক তথ্য নিরপেক্ষভাবে উপস্থাপন করা হবে; কোনো দল, প্রার্থী বা ব্যক্তির প্রচার করা হয় না।\n\n" +
                         "তথ্য হালনাগাদ করতে ভবিষ্যতে নতুন ডেটা প্যাকেজ বা অ্যাপ সংস্করণ ব্যবহার করা হবে।",
                     "This is an offline digital information encyclopedia for Maheshkhali Upazila, Cox's Bazar.\n\n" +
-                        "Data policy: nothing is invented. Every record shows its verification status (VERIFIED, PENDING, HISTORICAL, INFORMATION UNAVAILABLE) and source.\n\n" +
+                        "Data policy: nothing is invented.\n\n" +
                         "Political information is presented neutrally; no party, candidate or person is promoted.\n\n" +
                         "Updates will arrive as new data packages or app versions."
                 ),
