@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -49,7 +50,7 @@ class SmokeTest {
         // Settings tab and About screen
         rule.onNodeWithText("সেটিংস").performClick()
         waitForText("ভাষা")
-        rule.onNodeWithText("অ্যাপ সম্পর্কে").performClick()
+        rule.onNodeWithText("অ্যাপ সম্পর্কে").performScrollTo().performClick()
         waitForText("Developed By: ST SOTAN")
         waitForText("© 2026 ST SOTAN")
 
