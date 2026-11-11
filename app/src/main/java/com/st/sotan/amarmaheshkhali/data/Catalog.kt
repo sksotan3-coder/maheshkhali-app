@@ -36,7 +36,7 @@ val CATEGORIES = listOf(
     CategoryInfo("agriculture", "কৃষি", "Agriculture"),
     CategoryInfo("betel_leaf", "পান চাষ", "Betel Leaf Economy"),
     CategoryInfo("salt", "লবণ উৎপাদন", "Salt Production"),
-    CategoryInfo("chindi_fish", "চিন্‌দি মাছ ও মৎস্য", "Chindi Fish and Fisheries"),
+    CategoryInfo("mida", "মহেশখালী উন্নয়ন কর্তৃপক্ষ (মিডা)", "Maheshkhali Development Authority (MIDA)"),
     CategoryInfo("dry_fish", "শুঁটকি শিল্প", "Dry Fish Industry"),
     CategoryInfo("shrimp", "চিংড়ি ও জলজ চাষ", "Shrimp and Aquaculture"),
     CategoryInfo("markets", "বাজার ও ব্যবসা", "Local Markets and Businesses"),

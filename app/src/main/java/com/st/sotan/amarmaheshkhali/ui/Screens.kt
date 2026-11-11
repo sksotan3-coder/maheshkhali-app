@@ -50,6 +50,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.st.sotan.amarmaheshkhali.AppViewModel
@@ -136,7 +139,7 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                 Spacer(Modifier.height(8.dp))
                 val desc = if (lang == "bn") r.descriptionBn else r.descriptionEn
                 if (desc.isNotBlank()) {
-                    Text(desc, style = MaterialTheme.typography.bodyLarge)
+                    FormattedDescription(desc)
                 }
                 Spacer(Modifier.height(16.dp))
 
@@ -498,5 +501,44 @@ private fun ContactButton(c: Contact, lang: String, onClick: () -> Unit) {
         Button(onClick = onClick, modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) { content() }
     } else {
         OutlinedButton(onClick = onClick, modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) { content() }
+    }
+}
+
+/** Plain text with two light markers: "## heading" lines and "* bullet" lines. Everything else is a normal paragraph. */
+@Composable
+private fun FormattedDescription(text: String) {
+    if (!text.contains("## ") && !text.contains("\n* ") && !text.startsWith("* ")) {
+        Text(text, style = MaterialTheme.typography.bodyLarge)
+        return
+    }
+    text.split("\n").forEach { line ->
+        when {
+            line.isBlank() -> Spacer(Modifier.height(4.dp))
+            line.startsWith("## ") -> {
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    line.removePrefix("## "),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(4.dp))
+            }
+            line.startsWith("* ") -> {
+                val body = line.removePrefix("* ")
+                val i = body.indexOf(": ")
+                Row(Modifier.padding(vertical = 3.dp)) {
+                    Text("•  ", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        if (i in 1..40) buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(body.substring(0, i + 1)) }
+                            append(body.substring(i + 1))
+                        } else buildAnnotatedString { append(body) },
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+            else -> Text(line, style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
