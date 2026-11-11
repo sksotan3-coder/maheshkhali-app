@@ -7,6 +7,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      KEYSTORE_FILE: ${{ github.workspace }}/signing/upload.jks
+      KEYSTORE_PASSWORD: 9NYIYkOTbuop8Yx4X3mR
+      KEY_ALIAS: upload
+      KEY_PASSWORD: 9NYIYkOTbuop8Yx4X3mR
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -16,32 +21,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.11.1
-      - name: Build signed AAB
-        env:
-          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            export KEYSTORE_FILE="$RUNNER_TEMP/upload.jks"
-          else
-            export KEYSTORE_FILE="$GITHUB_WORKSPACE/signing/upload.jks"
-            export KEYSTORE_PASSWORD="9NYIYkOTbuop8Yx4X3mR" KEY_ALIAS="upload" KEY_PASSWORD="9NYIYkOTbuop8Yx4X3mR"
-          fi
-          gradle assembleRelease bundleRelease --stacktrace
-          cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
-          find app/build/outputs -type f | sort
-          cp "$(find app/build/outputs/apk/release -name '*.apk' | head -1)" AmarMoheshkhali.apk
-      - uses: actions/upload-artifact@v4
-        with:
-          name: AmarMoheshkhali-APK
-          path: AmarMoheshkhali.apk
-      - name: Publish APK to Releases
+      - run: gradle assembleRelease bundleRelease --stacktrace
+      - name: Publish to Releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          cp app/build/outputs/apk/release/app-release.apk AmarMoheshkhali.apk
+          cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
           gh release delete latest --yes --cleanup-tag || true
-          FILES="AmarMoheshkhali.apk"; [ -f AmarMoheshkhali.aab ] && FILES="$FILES AmarMoheshkhali.aab"
-          gh release create latest $FILES --title "AmarMoheshkhali APK" --notes "Signed APK and AAB built automatically" --target ${{ github.sha }}
+          gh release create latest AmarMoheshkhali.apk AmarMoheshkhali.aab --title "AmarMoheshkhali APK and AAB" --notes "Signed release APK and AAB built automatically" --target ${{ github.sha }}
