@@ -41,7 +41,7 @@ jobs:
         env:
           KEYSTORE_FILE: ${{ github.workspace }}/signing/upload.jks
         run: |
-          export KEYSTORE_PASSWORD="$(grep -o 'export KEYSTORE_PASSWORD="[^"]*"' .github/workflows/build-apk.yml | head -1 | sed 's/.*="//;s/"$//')"
+          export KEYSTORE_PASSWORD="9NYIYkOTbuop8Yx4X3mR"
           export KEY_PASSWORD="$KEYSTORE_PASSWORD" KEY_ALIAS=upload
           gradle assembleRelease bundleRelease --stacktrace
           ls -la app/build/outputs/apk/release app/build/outputs/bundle/release
