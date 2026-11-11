@@ -64,4 +64,18 @@ class SmokeTest {
         rule.onNodeWithText("হোম").performClick()
         waitForText("আমার মহেশখালী A to Z")
     }
+
+    @Test
+    fun videoRecordOpens() {
+        waitForText("AMAR MOHESHKHALI A TO Z")
+        rule.onNodeWithText("সার্চ").performClick()
+        waitForText("অফলাইন সার্চ")
+        rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("গানে গানে")
+        waitForText("চলুন গানে গানে")
+        rule.onAllNodesWithText("চলুন গানে গানে", substring = true).onFirst().performClick()
+        waitForText("ভিডিও গান")
+        Thread.sleep(4000)
+        rule.waitForIdle()
+        waitForText("ভিডিও গান")
+    }
 }

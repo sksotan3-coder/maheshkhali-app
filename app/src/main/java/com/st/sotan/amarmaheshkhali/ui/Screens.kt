@@ -151,7 +151,12 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     InfoRow(tr("অবস্থান", "Location"), "${r.latitude}, ${r.longitude}")
                 }
 
-                val contacts = parseContacts(r.phone)
+                val allContacts = parseContacts(r.phone)
+                allContacts.filter { it.type == "video" }.forEach { c ->
+                    Spacer(Modifier.height(8.dp))
+                    VideoPlayer(c.value)
+                }
+                val contacts = allContacts.filter { it.type != "video" }
                 if (contacts.isNotEmpty()) {
                     Spacer(Modifier.height(12.dp))
                     SectionLabel(tr("যোগাযোগ", "Contact"))
