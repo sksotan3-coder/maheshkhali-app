@@ -5,6 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,8 +22,13 @@ class SmokeTest {
     val rule = createAndroidComposeRule<MainActivity>()
 
     private fun waitForText(text: String, timeoutMs: Long = 20_000) {
-        rule.waitUntil(timeoutMs) {
-            rule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+        try {
+            rule.waitUntil(timeoutMs) {
+                rule.onAllNodesWithText(text, substring = true).fetchSemanticsNodes().isNotEmpty()
+            }
+        } catch (e: Throwable) {
+            val tree = try { rule.onRoot(useUnmergedTree = true).printToString(2500) } catch (t: Throwable) { "n/a" }
+            throw AssertionError("TEXT NOT FOUND: [$text]\n$tree", e)
         }
     }
 
