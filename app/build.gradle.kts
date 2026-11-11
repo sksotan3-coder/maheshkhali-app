@@ -32,7 +32,9 @@ android {
 
     buildTypes {
         release {
-            signingConfigs.findByName("release")?.let { signingConfig = it }
+            if (System.getenv("KEYSTORE_FILE") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

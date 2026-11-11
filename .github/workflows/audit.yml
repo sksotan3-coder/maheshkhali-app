@@ -45,6 +45,8 @@ jobs:
           export KEY_PASSWORD="$KEYSTORE_PASSWORD" KEY_ALIAS=upload
           gradle assembleRelease bundleRelease --stacktrace
           ls -la app/build/outputs/apk/release app/build/outputs/bundle/release
+          test -f app/build/outputs/apk/release/app-release.apk || { echo "APK NOT SIGNED"; exit 1; }
+          "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME"/build-tools | sort -V | tail -1)/apksigner verify --print-certs app/build/outputs/apk/release/app-release.apk | head -3
       - name: Emulator tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
