@@ -19,7 +19,11 @@ interface RecordDao {
                        OR village LIKE '%' || :q || '%' ESCAPE '\')
           AND (:category = '' OR category = :category)
           AND (:unionId = '' OR unionId = :unionId)
-        ORDER BY banglaName
+        ORDER BY CASE WHEN recordId LIKE 'edu-college-%' THEN 0
+                      WHEN recordId LIKE 'edu-madrasa-%' THEN 2
+                      ELSE 1 END,
+                 CASE WHEN recordId LIKE '%-list' THEN 0 ELSE 1 END,
+                 banglaName
         """
     )
     fun search(q: String, category: String, unionId: String): Flow<List<RecordEntity>>
