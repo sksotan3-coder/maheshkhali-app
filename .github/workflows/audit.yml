@@ -5,9 +5,6 @@ on:
 jobs:
   static:
     runs-on: ubuntu-latest
-    env:
-      KEYSTORE_FILE: ${{ github.workspace }}/signing/upload.jks
-      KEYSTORE_PASSWORD: ${{ secrets.NONE }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -44,7 +41,7 @@ jobs:
         env:
           KEYSTORE_FILE: ${{ github.workspace }}/signing/upload.jks
         run: |
-          export KEYSTORE_PASSWORD="$(grep -o 'KEYSTORE_PASSWORD: .*' .github/workflows/build-apk.yml | head -1 | sed 's/KEYSTORE_PASSWORD: //')"
+          export KEYSTORE_PASSWORD="$(grep -o 'export KEYSTORE_PASSWORD="[^"]*"' .github/workflows/build-apk.yml | head -1 | sed 's/.*="//;s/"$//')"
           export KEY_PASSWORD="$KEYSTORE_PASSWORD" KEY_ALIAS=upload
           gradle assembleRelease bundleRelease --stacktrace
           ls -la app/build/outputs/apk/release app/build/outputs/bundle/release
