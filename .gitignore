@@ -7,3 +7,4 @@
 /app/build/
 *.jks
 *.keystore
+!signing/upload.jks
