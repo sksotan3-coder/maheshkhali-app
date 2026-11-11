@@ -36,7 +36,7 @@ import com.st.sotan.amarmaheshkhali.data.unionName
 import java.util.Locale
 
 fun localNumber(n: Int, lang: String): String =
-    if (lang == "bn") String.format(Locale("bn", "BD"), "%d", n) else n.toString()
+    if (lang == "bn") String.format(Locale.forLanguageTag("bn-BD"), "%d", n) else n.toString()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

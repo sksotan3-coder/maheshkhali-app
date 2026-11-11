@@ -1,5 +1,6 @@
 package com.st.sotan.amarmaheshkhali
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -18,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -58,6 +60,7 @@ fun AppRoot(vm: AppViewModel) {
                 val current = backStack?.destination?.route
 
                 Scaffold(
+                    contentWindowInsets = WindowInsets(0, 0, 0, 0),
                     bottomBar = {
                         NavigationBar {
                             TABS.forEach { t ->
@@ -85,10 +88,10 @@ fun AppRoot(vm: AppViewModel) {
                         composable("home") {
                             HomeScreen(
                                 vm = vm,
-                                onSearch = { nav.navigate("search") },
-                                onCategory = { nav.navigate("list?cat=$it&union=") },
-                                onUnion = { nav.navigate("list?cat=&union=$it") },
-                                onAbout = { nav.navigate("about") }
+                                onSearch = { nav.go("search") },
+                                onCategory = { nav.go("list?cat=$it&union=") },
+                                onUnion = { nav.go("list?cat=&union=$it") },
+                                onAbout = { nav.go("about") }
                             )
                         }
                         composable(
@@ -102,7 +105,7 @@ fun AppRoot(vm: AppViewModel) {
                                 vm = vm,
                                 cat = entry.arguments?.getString("cat") ?: "",
                                 unionId = entry.arguments?.getString("union") ?: "",
-                                onOpen = { nav.navigate("detail/$it") },
+                                onOpen = { nav.go("detail/$it") },
                                 onBack = { nav.popBackStack() }
                             )
                         }
@@ -116,9 +119,9 @@ fun AppRoot(vm: AppViewModel) {
                                 onBack = { nav.popBackStack() }
                             )
                         }
-                        composable("search") { SearchScreen(vm) { nav.navigate("detail/$it") } }
-                        composable("favourites") { FavouritesScreen(vm) { nav.navigate("detail/$it") } }
-                        composable("settings") { SettingsScreen(vm) { nav.navigate("about") } }
+                        composable("search") { SearchScreen(vm) { nav.go("detail/$it") } }
+                        composable("favourites") { FavouritesScreen(vm) { nav.go("detail/$it") } }
+                        composable("settings") { SettingsScreen(vm) { nav.go("about") } }
                         composable("about") { AboutScreen { nav.popBackStack() } }
                     }
                 }
@@ -126,3 +129,6 @@ fun AppRoot(vm: AppViewModel) {
         }
     }
 }
+
+/** Navigate without stacking duplicates when the user double-taps. */
+private fun NavController.go(route: String) = navigate(route) { launchSingleTop = true }

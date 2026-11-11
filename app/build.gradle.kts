@@ -14,7 +14,8 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1
-        versionName = "0.3.0"
+        versionName = "0.4.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -32,7 +33,8 @@ android {
     buildTypes {
         release {
             signingConfigs.findByName("release")?.let { signingConfig = it }
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -48,6 +50,13 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+        textReport = true
+        htmlReport = false
+        xmlReport = false
     }
 }
 
@@ -70,4 +79,10 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
+
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.09.02"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

@@ -1,6 +1,7 @@
 package com.st.sotan.amarmaheshkhali
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.st.sotan.amarmaheshkhali.data.AppDatabase
@@ -21,7 +22,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppViewModel(private val app: Application) : AndroidViewModel(app) {
 
-    private val dao = AppDatabase.get(app).recordDao()
+    private val db = AppDatabase.get(app)
+    private val dao = db.recordDao()
     private val prefs = app.getSharedPreferences("settings", 0)
 
     // ---- Settings (saved on the phone only) ----
@@ -45,7 +47,7 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val results: StateFlow<List<RecordEntity>> =
         combine(query, category, union) { q, c, u -> Triple(q.trim(), c, u) }
-            .flatMapLatest { (q, c, u) -> dao.search(q, c, u) }
+            .flatMapLatest { (q, c, u) -> dao.search(escapeLike(q), c, u) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val favourites: StateFlow<List<RecordEntity>> =
@@ -59,6 +61,10 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
 
     fun record(id: String): Flow<RecordEntity?> = dao.byId(id)
 
+    /** Records of one category and/or union (used by the list screen). */
+    fun listResults(category: String, union: String): Flow<List<RecordEntity>> =
+        dao.search("", category, union)
+
     fun toggleFavourite(r: RecordEntity) {
         viewModelScope.launch(Dispatchers.IO) { dao.setFavourite(r.recordId, !r.isFavourite) }
     }
@@ -68,6 +74,17 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) { Seeder.seedIfEmpty(app, dao) }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                Seeder.seedIfNeeded(app, db)
+            } catch (e: Exception) {
+                // Never crash the app because of a data problem; keep whatever data is already stored.
+                Log.e("Seeder", "Could not load bundled data", e)
+            }
+        }
     }
 }
+
+/** Make a typed search text safe for SQL LIKE (so "%" and "_" are plain characters). */
+private fun escapeLike(q: String): String =
+    q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")

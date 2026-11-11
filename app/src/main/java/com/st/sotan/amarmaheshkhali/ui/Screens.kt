@@ -41,7 +41,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.onEach
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -65,13 +69,7 @@ fun ListScreen(
     onBack: () -> Unit
 ) {
     val lang by vm.lang.collectAsState()
-    val items by vm.results.collectAsState()
-
-    LaunchedEffect(cat, unionId) {
-        vm.query.value = ""
-        vm.category.value = cat
-        vm.union.value = unionId
-    }
+    val items by remember(cat, unionId) { vm.listResults(cat, unionId) }.collectAsState(initial = null)
 
     val title = when {
         cat.isNotEmpty() -> categoryName(cat, lang)
@@ -81,16 +79,19 @@ fun ListScreen(
 
     Column(Modifier.fillMaxSize()) {
         AppTopBar(title, onBack)
-        if (items.isEmpty()) {
+        val list = items
+        if (list == null) {
+            // still loading
+        } else if (list.isEmpty()) {
             EmptyState(
                 tr(
                     "এই বিভাগে এখনও কোনো তথ্য যুক্ত করা হয়নি।",
-                    "Information for this section has not been verified and added yet."
+                    "No information has been added to this section yet."
                 )
             )
         } else {
             LazyColumn(contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 8.dp)) {
-                items(items, key = { it.recordId }) { r ->
+                items(list, key = { it.recordId }) { r ->
                     RecordCard(r, lang) { onOpen(r.recordId) }
                 }
             }
@@ -102,7 +103,8 @@ fun ListScreen(
 @Composable
 fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
     val lang by vm.lang.collectAsState()
-    val record by vm.record(id).collectAsState(initial = null)
+    var loaded by remember { mutableStateOf(false) }
+    val record by remember(id) { vm.record(id).onEach { loaded = true } }.collectAsState(initial = null)
     val context = LocalContext.current
 
     LaunchedEffect(id) { vm.markViewed(id) }
@@ -113,7 +115,9 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
             if (r == null) "" else if (lang == "bn") r.banglaName else r.englishName,
             onBack
         )
-        if (r != null) {
+        if (r == null) {
+            if (loaded) EmptyState(tr("তথ্যটি পাওয়া যায়নি।", "This record was not found."))
+        } else {
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
@@ -389,6 +393,33 @@ fun AboutScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(16.dp))
             Text(
                 tr(
+                    "ST SOTAN একজন প্রযুক্তিপ্রেমী ও উদ্ভাবনী চিন্তাধারার মানুষ, যিনি প্রযুক্তির মাধ্যমে মানুষের দৈনন্দিন জীবনকে আরও সহজ, সুন্দর ও তথ্যসমৃদ্ধ করার লক্ষ্যে কাজ করছেন।\n\n" +
+                        "AMAR MOHESHKHALI A TO Z তাঁর একটি উদ্যোগ। এই অ্যাপের মূল উদ্দেশ্য হলো মহেশখালীর মানুষের কাছে প্রয়োজনীয় স্থানীয় তথ্য, গুরুত্বপূর্ণ সেবা ও বিভিন্ন তথ্যভান্ডার সহজেই পৌঁছে দেওয়া।\n\n" +
+                        "প্রযুক্তির সঠিক ব্যবহার, নির্ভরযোগ্য তথ্য এবং মানুষের উপকারকে গুরুত্ব দিয়েই এই উদ্যোগের যাত্রা।",
+                    "ST SOTAN is a technology enthusiast with an innovative mindset, working to make people's daily lives easier, better and more informed through technology.\n\n" +
+                        "AMAR MOHESHKHALI A TO Z is one of his initiatives. The main purpose of this app is to bring essential local information, important services and various information resources to the people of Maheshkhali.\n\n" +
+                        "This initiative began with a focus on the right use of technology, reliable information and benefit to people."
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                tr("আমাদের লক্ষ্য (Our Vision)", "Our Vision"),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                tr(
+                    "প্রযুক্তির মাধ্যমে মহেশখালীকে আরও তথ্যসমৃদ্ধ, আধুনিক ও ডিজিটালভাবে সংযুক্ত করা।",
+                    "To make Maheshkhali more informed, modern and digitally connected through technology."
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                tr(
                     "এটি কক্সবাজার জেলার মহেশখালী উপজেলার একটি অফলাইন ডিজিটাল তথ্যভান্ডার।\n\n" +
                         "তথ্যের নীতি: কোনো তথ্য বানিয়ে লেখা হয় না। \n\n" +
                         "রাজনৈতিক তথ্য নিরপেক্ষভাবে উপস্থাপন করা হবে; কোনো দল, প্রার্থী বা ব্যক্তির প্রচার করা হয় না।\n\n" +
@@ -399,6 +430,12 @@ fun AboutScreen(onBack: () -> Unit) {
                         "Updates will arrive as new data packages or app versions."
                 ),
                 style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(Modifier.height(24.dp))
+            Text(
+                "© 2026 ST SOTAN. All Rights Reserved.",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
             )
         }
     }

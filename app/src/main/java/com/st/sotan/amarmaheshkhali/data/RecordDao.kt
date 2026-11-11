@@ -12,11 +12,11 @@ interface RecordDao {
     @Query(
         """
         SELECT * FROM records
-        WHERE (:q = '' OR banglaName LIKE '%' || :q || '%'
-                       OR englishName LIKE '%' || :q || '%'
-                       OR descriptionBn LIKE '%' || :q || '%'
-                       OR descriptionEn LIKE '%' || :q || '%'
-                       OR village LIKE '%' || :q || '%')
+        WHERE (:q = '' OR banglaName LIKE '%' || :q || '%' ESCAPE '\'
+                       OR englishName LIKE '%' || :q || '%' ESCAPE '\'
+                       OR descriptionBn LIKE '%' || :q || '%' ESCAPE '\'
+                       OR descriptionEn LIKE '%' || :q || '%' ESCAPE '\'
+                       OR village LIKE '%' || :q || '%' ESCAPE '\')
           AND (:category = '' OR category = :category)
           AND (:unionId = '' OR unionId = :unionId)
         ORDER BY banglaName
@@ -39,14 +39,17 @@ interface RecordDao {
     @Query("SELECT COUNT(*) FROM records")
     suspend fun count(): Int
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(items: List<RecordEntity>)
-
     @Query("SELECT recordId FROM records WHERE isFavourite = 1")
     suspend fun favouriteIds(): List<String>
 
-    @Query("DELETE FROM records WHERE recordId NOT IN (:ids)")
-    suspend fun deleteNotIn(ids: List<String>)
+    @Query("SELECT recordId FROM records")
+    suspend fun allIds(): List<String>
+
+    @Query("SELECT recordId, lastViewed FROM records WHERE lastViewed > 0")
+    suspend fun viewedRows(): List<ViewedRow>
+
+    @Query("DELETE FROM records WHERE recordId IN (:ids)")
+    suspend fun deleteByIds(ids: List<String>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(items: List<RecordEntity>)
@@ -59,3 +62,5 @@ interface RecordDao {
 }
 
 data class CategoryCount(val category: String, val total: Int)
+
+data class ViewedRow(val recordId: String, val lastViewed: Long)

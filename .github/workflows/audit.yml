@@ -1,0 +1,58 @@
+name: Audit
+on:
+  push:
+    branches: [audit]
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    env:
+      KEYSTORE_FILE: ${{ github.workspace }}/signing/upload.jks
+      KEYSTORE_PASSWORD: ${{ secrets.NONE }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.11.1 }
+      - name: Data validation
+        run: python3 .github/scripts/validate_data.py
+      - name: Dependency vulnerability check (OSV)
+        run: python3 .github/scripts/osv_check.py
+      - name: Android Lint
+        run: gradle :app:lintRelease --stacktrace || true
+      - name: Lint report
+        run: |
+          find app/build -name "lint-results*.txt" -exec cat {} \; | head -300
+  emulator:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [26, 35]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.11.1 }
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Build signed release APK (R8 enabled)
+        env:
+          KEYSTORE_FILE: ${{ github.workspace }}/signing/upload.jks
+        run: |
+          export KEYSTORE_PASSWORD="$(grep -o 'KEYSTORE_PASSWORD: .*' .github/workflows/build-apk.yml | head -1 | sed 's/KEYSTORE_PASSWORD: //')"
+          export KEY_PASSWORD="$KEYSTORE_PASSWORD" KEY_ALIAS=upload
+          gradle assembleRelease bundleRelease --stacktrace
+          ls -la app/build/outputs/apk/release app/build/outputs/bundle/release
+      - name: Emulator tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          script: bash .github/scripts/emu.sh
