@@ -972,19 +972,6 @@
   "phone": ""
  },
  {
-  "id": "edu-school-list",
-  "bn": "মহেশখালী উপজেলার স্কুলের তালিকা ও EIIN",
-  "en": "Schools of Maheshkhali with EIIN",
-  "cat": "education",
-  "status": "PENDING",
-  "updated": "",
-  "source": "",
-  "descBn": "মহেশখালী উপজেলার মাধ্যমিক ও জুনিয়র বিদ্যালয়ের তালিকা (EIIN নম্বরসহ):\n\n১. মহেশখালী মডেল হাই স্কুল — EIIN: ১০৬৩৪০\n২. মহেশখালী সরকারি বালিকা উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৪\n৩. মহেশখালী আইল্যান্ড হাই স্কুল — EIIN: ১০৬৩৩৫\n৪. বড় মহেশখালী বালিকা উচ্চ বিদ্যালয় — EIIN: ১০৬৩৩৯\n৫. কালারমারছড়া উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৩\n৬. মাতারবাড়ী উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪১\n৭. শাপলাপুর উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৫\n৮. হোয়ানক এম. এল. উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪২\n৯. ইউনুসখালী নাসির উদ্দিন উচ্চ বিদ্যালয় — EIIN: ১০৬৩৩৭\n১০. আব্দুল মাবুদ চৌধুরী উচ্চ বিদ্যালয় — EIIN: ১০৬৩৫২\n১১. মাতারবাড়ী আদর্শ পাবলিক উচ্চ বিদ্যালয় — EIIN: ১০৬৩৫৪\n১২. কুতুবজোম আইডিয়াল উচ্চ বিদ্যালয় — EIIN: ১০৬৩৩৮\n১৩. কুতুবজোম অফ-শোর উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৮\n১৪. ধলঘাটা আদর্শ উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৬\n১৫. পানিরছড়া আইডিয়াল উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৭\n১৬. ছোট মহেশখালী মডেল জুনিয়র স্কুল — EIIN: ১০৬৩৪৯\n১৭. চনখোলাপাড়া জুনিয়র স্কুল — EIIN: ১৩১২৪৬\n১৮. উত্তর নলবিলা জুনিয়র উচ্চ বিদ্যালয় — EIIN: ১০৬৩৫১\n১৯. হোয়ানক জুনিয়র বালিকা বিদ্যালয় — EIIN: ১০৬৩৩৬",
-  "descEn": "মহেশখালী উপজেলার মাধ্যমিক ও জুনিয়র বিদ্যালয়ের তালিকা (EIIN নম্বরসহ):\n\n১. মহেশখালী মডেল হাই স্কুল — EIIN: ১০৬৩৪০\n২. মহেশখালী সরকারি বালিকা উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৪\n৩. মহেশখালী আইল্যান্ড হাই স্কুল — EIIN: ১০৬৩৩৫\n৪. বড় মহেশখালী বালিকা উচ্চ বিদ্যালয় — EIIN: ১০৬৩৩৯\n৫. কালারমারছড়া উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৩\n৬. মাতারবাড়ী উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪১\n৭. শাপলাপুর উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৫\n৮. হোয়ানক এম. এল. উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪২\n৯. ইউনুসখালী নাসির উদ্দিন উচ্চ বিদ্যালয় — EIIN: ১০৬৩৩৭\n১০. আব্দুল মাবুদ চৌধুরী উচ্চ বিদ্যালয় — EIIN: ১০৬৩৫২\n১১. মাতারবাড়ী আদর্শ পাবলিক উচ্চ বিদ্যালয় — EIIN: ১০৬৩৫৪\n১২. কুতুবজোম আইডিয়াল উচ্চ বিদ্যালয় — EIIN: ১০৬৩৩৮\n১৩. কুতুবজোম অফ-শোর উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৮\n১৪. ধলঘাটা আদর্শ উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৬\n১৫. পানিরছড়া আইডিয়াল উচ্চ বিদ্যালয় — EIIN: ১০৬৩৪৭\n১৬. ছোট মহেশখালী মডেল জুনিয়র স্কুল — EIIN: ১০৬৩৪৯\n১৭. চনখোলাপাড়া জুনিয়র স্কুল — EIIN: ১৩১২৪৬\n১৮. উত্তর নলবিলা জুনিয়র উচ্চ বিদ্যালয় — EIIN: ১০৬৩৫১\n১৯. হোয়ানক জুনিয়র বালিকা বিদ্যালয় — EIIN: ১০৬৩৩৬",
-  "address": "",
-  "phone": ""
- },
- {
   "id": "health-complex",
   "bn": "মহেশখালী উপজেলা স্বাস্থ্য কমপ্লেক্স",
   "en": "Maheshkhali Upazila Health Complex",
@@ -1335,30 +1322,6 @@
   "source": "",
   "descBn": "উত্তর নলবিলা মোহাম্মদিয়া সুন্নিয়া দাখিল মাদ্রাসা\nEIIN / আইডি নম্বর: ১৩৫২৮৩\nপর্যায় ও ডিগ্রি: দাখিল মাদ্রাসা: দাখিল (SSC সমমান)\nঅবস্থান: মহেশখালী, কক্সবাজার।",
   "descEn": "North Nalbila Mohammadia Sunnia Dakhil Madrasa\nEIIN: ১৩৫২৮৩\nLevel / Programme: Dakhil Madrasa: Dakhil (SSC equivalent)\nLocation: Maheshkhali, Cox's Bazar.",
-  "address": "মহেশখালী, কক্সবাজার"
- },
- {
-  "id": "edu-college-list",
-  "bn": "মহেশখালী উপজেলার কলেজসমূহের তালিকা ও ডিগ্রি",
-  "en": "Colleges of Maheshkhali Upazila",
-  "cat": "education",
-  "status": "PENDING",
-  "updated": "",
-  "source": "",
-  "descBn": "মহেশখালী উপজেলার কলেজসমূহ (EIIN নম্বর ও ডিগ্রিসহ):\n\n1. মহেশখালী কলেজ — EIIN: ১০৬৩৭২\n2. মহেশখালী সরকারি মহিলা কলেজ — EIIN: ১০৬৩৭৪\n3. হোয়ানক কলেজ — EIIN: ১০৬৩৭৩\n4. আলমগীর ফরিদ টেকনিক্যাল অ্যান্ড বিএম কলেজ — EIIN: ১৩২২০৫\n\nপ্রতিটি কলেজের বিস্তারিত নিচের তালিকায় দেখুন।",
-  "descEn": "Colleges of Maheshkhali Upazila with EIIN numbers:\n\n1. Maheshkhali College — EIIN: ১০৬৩৭২\n2. Maheshkhali Government Women's College — EIIN: ১০৬৩৭৪\n3. Hoanak College — EIIN: ১০৬৩৭৩\n4. Alamgir Farid Technical and BM College — EIIN: ১৩২২০৫",
-  "address": "মহেশখালী, কক্সবাজার"
- },
- {
-  "id": "edu-madrasa-list",
-  "bn": "মহেশখালী উপজেলার প্রধান ও পরিচিত মাদ্রাসা",
-  "en": "Main Madrasas of Maheshkhali Upazila",
-  "cat": "education",
-  "status": "PENDING",
-  "updated": "",
-  "source": "",
-  "descBn": "মহেশখালী উপজেলার প্রধান ও পরিচিত মাদ্রাসা (EIIN নম্বরসহ):\n\n1. পুটিবিলা ইসলামিয়া ফাজিল মাদ্রাসা — EIIN: ১০৬৩৫৫ (ফাজিল মাদ্রাসা)\n2. মাতারবাড়ী মজিদিয়া সুন্নিয়া আলিম মাদ্রাসা — EIIN: ১০৬৩৫৬ (আলিম মাদ্রাসা)\n3. কালারমারছড়া মঈনুল ইসলাম আলিম মাদ্রাসা — EIIN: ১০৬৩৫৭ (আলিম মাদ্রাসা)\n4. মুহুরীঘোনা মোহাম্মদিয়া ইসলামিয়া আলিম মাদ্রাসা — EIIN: ১০৬৩৫৯ (আলিম মাদ্রাসা)\n5. শাপলাপুর ইসলামিয়া আলিম মাদ্রাসা — EIIN: ১০৬৩৬০ (আলিম মাদ্রাসা)\n6. ধলঘাটা হোসাইনিয়া বদরুল উলুম দাখিল মাদ্রাসা — EIIN: ১০৬৩৫৮ (দাখিল মাদ্রাসা)\n7. কুতুবজোম জামেউস সুন্নাহ দারুল উলুম দাখিল মাদ্রাসা — EIIN: ১০৬৩৬১ (দাখিল মাদ্রাসা)\n8. হোয়ানক রশিদিয়া সুন্নিয়া দাখিল মাদ্রাসা — EIIN: ১০৬৩৬২ (দাখিল মাদ্রাসা)\n9. শাপলাপুর ষাইটমারা মহিউস সুন্নাহ দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৩ (দাখিল মাদ্রাসা)\n10. মাতারবাড়ী রাজঘাট রশিদিয়া হাসমতিয়া দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৪ (দাখিল মাদ্রাসা)\n11. আহমদিয়া তৈয়বিয়া সুন্নিয়া দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৫ (দাখিল মাদ্রাসা)\n12. হোয়ানক ইসলামিয়া দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৬ (দাখিল মাদ্রাসা)\n13. কালারমারছড়া শাহ মজিদিয়া বালিকা দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৭ (দাখিল মাদ্রাসা)\n14. শাহ মজিদিয়া বালিকা দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৮ (দাখিল মাদ্রাসা)\n15. বড় মহেশখালী দারুল কুরআন সুন্নিয়া দাখিল মাদ্রাসা — EIIN: ১০৬৩৬৯ (দাখিল মাদ্রাসা)\n16. পানিরছড়া ইসলামিয়া দাখিল মাদ্রাসা — EIIN: ১০৬৩৭০ (দাখিল মাদ্রাসা)\n17. কালারমারছড়া আদর্শ দাখিল মাদ্রাসা — EIIN: ১০৬৩৭১ (দাখিল মাদ্রাসা)\n18. তাজিয়াকাটা সুমাইয়া (রাঃ) বালিকা দাখিল মাদ্রাসা — EIIN: ১৩১৫৬১ (দাখিল মাদ্রাসা)\n19. বড় মহেশখালী মহিলা দাখিল মাদ্রাসা — EIIN: ১৩৪২১১ (দাখিল মাদ্রাসা)\n20. উত্তর নলবিলা মোহাম্মদিয়া সুন্নিয়া দাখিল মাদ্রাসা — EIIN: ১৩৫২৮৩ (দাখিল মাদ্রাসা)",
-  "descEn": "Main madrasas of Maheshkhali Upazila with EIIN numbers:\n\n1. Putibila Islamia Fazil Madrasa — EIIN: ১০৬৩৫৫\n2. Matarbari Mojidia Sunnia Alim Madrasa — EIIN: ১০৬৩৫৬\n3. Kalarmarchhara Moinul Islam Alim Madrasa — EIIN: ১০৬৩৫৭\n4. Muhurighona Mohammadia Islamia Alim Madrasa — EIIN: ১০৬৩৫৯\n5. Shaplapur Islamia Alim Madrasa — EIIN: ১০৬৩৬০\n6. Dholghata Hossainia Badrul Ulum Dakhil Madrasa — EIIN: ১০৬৩৫৮\n7. Kutubjom Jameus Sunnah Darul Ulum Dakhil Madrasa — EIIN: ১০৬৩৬১\n8. Hoanak Rashidia Sunnia Dakhil Madrasa — EIIN: ১০৬৩৬২\n9. Shaplapur Shaitmara Mohiyus Sunnah Dakhil Madrasa — EIIN: ১০৬৩৬৩\n10. Matarbari Rajghat Rashidia Hasmatia Dakhil Madrasa — EIIN: ১০৬৩৬৪\n11. Ahmadia Taiyabia Sunnia Dakhil Madrasa — EIIN: ১০৬৩৬৫\n12. Hoanak Islamia Dakhil Madrasa — EIIN: ১০৬৩৬৬\n13. Kalarmarchhara Shah Mojidia Girls Dakhil Madrasa — EIIN: ১০৬৩৬৭\n14. Shah Mojidia Girls Dakhil Madrasa — EIIN: ১০৬৩৬৮\n15. Bara Maheshkhali Darul Quran Sunnia Dakhil Madrasa — EIIN: ১০৬৩৬৯\n16. Panirchhara Islamia Dakhil Madrasa — EIIN: ১০৬৩৭০\n17. Kalarmarchhara Adarsha Dakhil Madrasa — EIIN: ১০৬৩৭১\n18. Tajiakata Sumaiya (R.) Girls Dakhil Madrasa — EIIN: ১৩১৫৬১\n19. Bara Maheshkhali Mohila Dakhil Madrasa — EIIN: ১৩৪২১১\n20. North Nalbila Mohammadia Sunnia Dakhil Madrasa — EIIN: ১৩৫২৮৩",
   "address": "মহেশখালী, কক্সবাজার"
  }
 ]
