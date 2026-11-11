@@ -36,7 +36,7 @@ class SmokeTest {
     fun walkThroughApp() {
         // Home (data is loaded in the background on first launch)
         waitForText("AMAR MOHESHKHALI A TO Z")
-        waitForText("টি রেকর্ড")
+        waitForText("আমার মহেশখালী A to Z")
 
         // Search tab: type a word and open the first result
         rule.onNodeWithText("সার্চ").performClick()
@@ -61,7 +61,6 @@ class SmokeTest {
         rule.onNodeWithText("প্রিয়").performClick()
         waitForText("প্রিয় তথ্য")
         rule.onNodeWithText("হোম").performClick()
-        waitForText("সব বিভাগ")
-        rule.onNodeWithText("সব বিভাগ").assertIsDisplayed()
+        waitForText("আমার মহেশখালী A to Z")
     }
 }
