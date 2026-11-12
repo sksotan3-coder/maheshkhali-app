@@ -15,11 +15,12 @@ for r in d:
     if r.get('union') and r['union'] not in unions: problems.append(f"{r['id']}: unknown union {r['union']}")
     for line in r.get('phone', '').splitlines():
         p = line.split('|', 2)
-        if len(p) != 3 or p[0] not in ('call', 'mail', 'web', 'video'):
+        if len(p) != 3 or p[0] not in ('call', 'mail', 'web', 'video', 'image'):
             problems.append(f"{r['id']}: bad contact line {line!r}"); continue
         if p[0] == 'call' and not re.fullmatch(r'\+?\d{3,15}', p[2]): problems.append(f"{r['id']}: bad phone {p[2]!r}")
         if p[0] == 'mail' and not re.fullmatch(r'[^@\s]+@[^@\s]+\.[^@\s]+', p[2]): problems.append(f"{r['id']}: bad email {p[2]!r}")
         if p[0] == 'video' and not os.path.exists('app/src/main/assets/videos/' + p[2]): problems.append(f"{r['id']}: missing video {p[2]!r}")
+        if p[0] == 'image' and not os.path.exists('app/src/main/assets/maps/' + p[2]): problems.append(f"{r['id']}: missing image {p[2]!r}")
         if p[0] == 'web' and not p[2].startswith('https://'): problems.append(f"{r['id']}: non-https url {p[2]!r}")
     if re.search(r'�|\t', r.get('descBn', '')): problems.append(f"{r['id']}: bad characters in text")
 by = collections.Counter(r['cat'] for r in d)

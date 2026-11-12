@@ -78,4 +78,15 @@ class SmokeTest {
         rule.waitForIdle()
         waitForText("ভিডিও গান")
     }
+
+    @Test
+    fun mapRecordOpens() {
+        waitForText("AMAR MOHESHKHALI A TO Z")
+        rule.onNodeWithText("সার্চ").performClick()
+        waitForText("অফলাইন সার্চ")
+        rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("উপজেলা মানচিত্র")
+        waitForText("মহেশখালী উপজেলা মানচিত্র")
+        rule.onAllNodesWithText("মহেশখালী উপজেলা মানচিত্র", substring = true).onFirst().performClick()
+        waitForText("জুম করতে")
+    }
 }

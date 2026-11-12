@@ -1349,5 +1349,18 @@
   "descEn": "Video song. Duration: about 3 minutes 20 seconds.",
   "address": "",
   "phone": "video|ভিডিও|gaane-gaane.mp4"
+ },
+ {
+  "id": "map-upazila",
+  "bn": "মহেশখালী উপজেলা মানচিত্র",
+  "en": "Maheshkhali Upazila Map",
+  "cat": "maps",
+  "status": "PENDING",
+  "updated": "",
+  "source": "",
+  "descBn": "মহেশখালী উপজেলার মানচিত্র: ইউনিয়ন সদর, সড়ক, বাজার, স্কুল, মাদ্রাসা, স্বাস্থ্য কেন্দ্র ও অন্যান্য স্থাপনাসহ।\n\nজুম করতে দুই আঙুল দিয়ে চেপে ধরে বড় করুন।",
+  "descEn": "Map of Maheshkhali Upazila showing union headquarters, roads, bazaars, schools, madrasas, health centres and other facilities.\n\nPinch with two fingers to zoom.",
+  "address": "মহেশখালী, কক্সবাজার",
+  "phone": "image|মানচিত্র|upazila-map.jpg"
  }
 ]

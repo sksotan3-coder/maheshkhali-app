@@ -156,7 +156,11 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     Spacer(Modifier.height(8.dp))
                     VideoPlayer(c.value)
                 }
-                val contacts = allContacts.filter { it.type != "video" }
+                allContacts.filter { it.type == "image" }.forEach { c ->
+                    Spacer(Modifier.height(8.dp))
+                    ZoomImage(c.value, tr(r.banglaName, r.englishName))
+                }
+                val contacts = allContacts.filter { it.type != "video" && it.type != "image" }
                 if (contacts.isNotEmpty()) {
                     Spacer(Modifier.height(12.dp))
                     SectionLabel(tr("যোগাযোগ", "Contact"))
