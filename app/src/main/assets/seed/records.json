@@ -1362,5 +1362,18 @@
   "descEn": "Map of Maheshkhali Upazila showing union headquarters, roads, bazaars, schools, madrasas, health centres and other facilities.\n\nPinch with two fingers to zoom.",
   "address": "মহেশখালী, কক্সবাজার",
   "phone": "image|মানচিত্র|upazila-map.jpg"
+ },
+ {
+  "id": "video-island",
+  "bn": "মহেশখালী দ্বীপ, বাংলাদেশ",
+  "en": "Moheshkhali Island, Bangladesh",
+  "cat": "videos",
+  "status": "PENDING",
+  "updated": "",
+  "source": "",
+  "descBn": "মহেশখালী দ্বীপের ভিডিও। সময়: প্রায় ৬ মিনিট ৪০ সেকেন্ড।",
+  "descEn": "Video of Moheshkhali Island. Duration: about 6 minutes 40 seconds.",
+  "address": "",
+  "phone": "video|ভিডিও|moheshkhali-island.mp4"
  }
 ]
