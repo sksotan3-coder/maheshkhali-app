@@ -116,7 +116,7 @@ class SmokeTest {
         waitForText("AMAR MOHESHKHALI A TO Z")
         rule.onNodeWithText("সার্চ").performClick()
         waitForText("অফলাইন সার্চ")
-        rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("সূর্যাস্তে একটি রিসোর্ট")
+        rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("একটি রিসোর্ট")
         waitForText("সূর্যাস্তে একটি রিসোর্ট")
         rule.onAllNodesWithText("সূর্যাস্তে একটি রিসোর্ট", substring = true).onFirst().performClick()
         waitForText("১২/১২")
