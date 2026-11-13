@@ -38,8 +38,8 @@ class SmokeTest {
     @Test
     fun walkThroughApp() {
         // Home (data is loaded in the background on first launch)
-        waitForText("AMAR MOHESHKHALI A TO Z")
-        waitForText("আমার মহেশখালী A to Z")
+        waitForText("AMAR MOHESHKHALI")
+        waitForText("আমার মহেশখালী")
 
         // Search tab: type a word and open the first result
         rule.onNodeWithText("সার্চ").performClick()
@@ -60,16 +60,16 @@ class SmokeTest {
 
     @Test
     fun favouritesAndHome() {
-        waitForText("AMAR MOHESHKHALI A TO Z")
+        waitForText("AMAR MOHESHKHALI")
         rule.onNodeWithText("প্রিয়").performClick()
         waitForText("প্রিয় তথ্য")
         rule.onNodeWithText("হোম").performClick()
-        waitForText("আমার মহেশখালী A to Z")
+        waitForText("আমার মহেশখালী")
     }
 
     @Test
     fun videoRecordOpens() {
-        waitForText("AMAR MOHESHKHALI A TO Z")
+        waitForText("AMAR MOHESHKHALI")
         rule.onNodeWithText("সার্চ").performClick()
         waitForText("অফলাইন সার্চ")
         rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("গানে গানে")
@@ -102,7 +102,7 @@ class SmokeTest {
 
     @Test
     fun mapRecordOpens() {
-        waitForText("AMAR MOHESHKHALI A TO Z")
+        waitForText("AMAR MOHESHKHALI")
         rule.onNodeWithText("সার্চ").performClick()
         waitForText("অফলাইন সার্চ")
         rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("উপজেলা মানচিত্র")
@@ -113,7 +113,7 @@ class SmokeTest {
 
     @Test
     fun photoRecordOpens() {
-        waitForText("AMAR MOHESHKHALI A TO Z")
+        waitForText("AMAR MOHESHKHALI")
         rule.onNodeWithText("সার্চ").performClick()
         waitForText("অফলাইন সার্চ")
         rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("একটি রিসোর্ট")

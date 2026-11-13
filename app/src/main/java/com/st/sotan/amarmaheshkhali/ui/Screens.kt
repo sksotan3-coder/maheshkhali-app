@@ -326,7 +326,7 @@ fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit) {
 
             Spacer(Modifier.height(16.dp))
             SettingTitle(tr("অ্যাপ তথ্য", "App Information"))
-            InfoRow(tr("অ্যাপ", "App"), "AMAR MOHESHKHALI A TO Z")
+            InfoRow(tr("অ্যাপ", "App"), "AMAR MOHESHKHALI")
             InfoRow(tr("ডেভেলপার", "Developer"), "ST SOTAN")
             InfoRow(tr("ডেটা সংস্করণ", "Data Version"), Seeder.DATA_VERSION)
             InfoRow(tr("সর্বশেষ আপডেট", "Last Updated"), Seeder.DATA_DATE)
@@ -391,7 +391,7 @@ fun AboutScreen(onBack: () -> Unit) {
             ) {
                 Column(Modifier.padding(16.dp)) {
                     Text(
-                        "AMAR MOHESHKHALI A TO Z",
+                        "AMAR MOHESHKHALI",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -406,10 +406,10 @@ fun AboutScreen(onBack: () -> Unit) {
             Text(
                 tr(
                     "ST SOTAN একজন প্রযুক্তিপ্রেমী ও উদ্ভাবনী চিন্তাধারার মানুষ, যিনি প্রযুক্তির মাধ্যমে মানুষের দৈনন্দিন জীবনকে আরও সহজ, সুন্দর ও তথ্যসমৃদ্ধ করার লক্ষ্যে কাজ করছেন।\n\n" +
-                        "AMAR MOHESHKHALI A TO Z তাঁর একটি উদ্যোগ। এই অ্যাপের মূল উদ্দেশ্য হলো মহেশখালীর মানুষের কাছে প্রয়োজনীয় স্থানীয় তথ্য, গুরুত্বপূর্ণ সেবা ও বিভিন্ন তথ্যভান্ডার সহজেই পৌঁছে দেওয়া।\n\n" +
+                        "AMAR MOHESHKHALI তাঁর একটি উদ্যোগ। এই অ্যাপের মূল উদ্দেশ্য হলো মহেশখালীর মানুষের কাছে প্রয়োজনীয় স্থানীয় তথ্য, গুরুত্বপূর্ণ সেবা ও বিভিন্ন তথ্যভান্ডার সহজেই পৌঁছে দেওয়া।\n\n" +
                         "প্রযুক্তির সঠিক ব্যবহার, নির্ভরযোগ্য তথ্য এবং মানুষের উপকারকে গুরুত্ব দিয়েই এই উদ্যোগের যাত্রা।",
                     "ST SOTAN is a technology enthusiast with an innovative mindset, working to make people's daily lives easier, better and more informed through technology.\n\n" +
-                        "AMAR MOHESHKHALI A TO Z is one of his initiatives. The main purpose of this app is to bring essential local information, important services and various information resources to the people of Maheshkhali.\n\n" +
+                        "AMAR MOHESHKHALI is one of his initiatives. The main purpose of this app is to bring essential local information, important services and various information resources to the people of Maheshkhali.\n\n" +
                         "This initiative began with a focus on the right use of technology, reliable information and benefit to people."
                 ),
                 style = MaterialTheme.typography.bodyMedium

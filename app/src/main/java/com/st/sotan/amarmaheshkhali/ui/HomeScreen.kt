@@ -51,7 +51,7 @@ fun HomeScreen(
     val countMap = remember(counts) { counts.associate { it.category to it.total } }
 
     Column {
-        AppTopBar("AMAR MOHESHKHALI A TO Z")
+        AppTopBar("AMAR MOHESHKHALI")
         LazyColumn(contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 24.dp)) {
 
             // Cover / intro
@@ -67,7 +67,7 @@ fun HomeScreen(
                     ) {
                         Column(Modifier.padding(20.dp)) {
                             Text(
-                                tr("আমার মহেশখালী A to Z", "Amar Maheshkhali A to Z"),
+                                tr("আমার মহেশখালী", "Amar Maheshkhali"),
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer
