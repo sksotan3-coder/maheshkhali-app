@@ -32,17 +32,17 @@ jobs:
             export KEYSTORE_PASSWORD="9NYIYkOTbuop8Yx4X3mR" KEY_ALIAS="upload" KEY_PASSWORD="9NYIYkOTbuop8Yx4X3mR"
           fi
           gradle assembleRelease bundleRelease --stacktrace
-          cp app/build/outputs/bundle/release/app-release.aab AmarMoheshkhali.aab
+          cp app/build/outputs/bundle/release/app-release.aab AMAR-MOHESHKHALI.aab
           find app/build/outputs -type f | sort
-          cp "$(find app/build/outputs/apk/release -name '*.apk' | head -1)" AmarMoheshkhali.apk
+          cp "$(find app/build/outputs/apk/release -name '*.apk' | head -1)" AMAR-MOHESHKHALI.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: AmarMoheshkhali-APK
-          path: AmarMoheshkhali.apk
+          name: AMAR-MOHESHKHALI-APK
+          path: AMAR-MOHESHKHALI.apk
       - name: Publish APK to Releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete latest --yes --cleanup-tag || true
-          FILES="AmarMoheshkhali.apk"; [ -f AmarMoheshkhali.aab ] && FILES="$FILES AmarMoheshkhali.aab"
-          gh release create latest $FILES --title "AmarMoheshkhali APK" --notes "Signed APK and AAB built automatically" --target ${{ github.sha }}
+          FILES="AMAR-MOHESHKHALI.apk"; [ -f AMAR-MOHESHKHALI.aab ] && FILES="$FILES AMAR-MOHESHKHALI.aab"
+          gh release create latest $FILES --title "AMAR MOHESHKHALI (APK + AAB)" --notes "Signed APK and AAB built automatically" --target ${{ github.sha }}
