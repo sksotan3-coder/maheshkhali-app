@@ -539,7 +539,7 @@ private fun FormattedDescription(text: String) {
                 Row(Modifier.padding(vertical = 3.dp)) {
                     Text("•  ", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
                     Text(
-                        if (i in 1..40) buildAnnotatedString {
+                        if (i in 1..60) buildAnnotatedString {
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(body.substring(0, i + 1)) }
                             append(body.substring(i + 1))
                         } else buildAnnotatedString { append(body) },
