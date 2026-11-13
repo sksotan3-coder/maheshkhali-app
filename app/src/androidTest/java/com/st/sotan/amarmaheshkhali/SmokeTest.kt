@@ -5,6 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.performClick
@@ -74,8 +76,27 @@ class SmokeTest {
         waitForText("চলুন গানে গানে")
         rule.onAllNodesWithText("চলুন গানে গানে", substring = true).onFirst().performClick()
         waitForText("ভিডিও গান")
-        Thread.sleep(4000)
+        // custom player: total length is read from the file (03:20), controls exist
+        waitForText("03:20", 40_000)
+        rule.onNodeWithContentDescription("প্লে").performClick()
+        rule.waitUntil(20_000) {
+            rule.onAllNodesWithContentDescription("পজ").fetchSemanticsNodes().isNotEmpty()
+        }
+        rule.onNodeWithContentDescription("পজ").performClick()
+        rule.onNodeWithContentDescription("১০ সেকেন্ড সামনে").performClick()
+        rule.onNodeWithContentDescription("১০ সেকেন্ড সামনে").performClick()
+        // two skips = at least 20 s, so the clock must no longer show 00:xx below 00:20
+        rule.waitUntil(10_000) {
+            rule.onAllNodesWithText("00:2", substring = true).fetchSemanticsNodes().isNotEmpty() ||
+                rule.onAllNodesWithText("00:3", substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
+        rule.onNodeWithContentDescription("১০ সেকেন্ড পেছনে").performClick()
+        rule.onNodeWithContentDescription("ফুলস্ক্রিন").performClick()
         rule.waitForIdle()
+        rule.waitUntil(20_000) {
+            rule.onAllNodesWithContentDescription("ফুলস্ক্রিন থেকে বের হন").fetchSemanticsNodes().isNotEmpty()
+        }
+        rule.onNodeWithContentDescription("ফুলস্ক্রিন থেকে বের হন").performClick()
         waitForText("ভিডিও গান")
     }
 
