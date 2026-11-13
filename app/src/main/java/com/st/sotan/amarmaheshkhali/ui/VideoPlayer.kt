@@ -404,6 +404,7 @@ private fun VideoSurface(state: VideoState, path: String, modifier: Modifier) {
             val vv = VideoView(ctx)
             vv.setVideoPath(path)
             vv.setOnPreparedListener {
+                android.util.Log.i("VideoPlayer", "prepared duration=${vv.duration}")
                 state.duration = vv.duration
                 state.ended = false
                 if (state.position > 0) vv.seekTo(state.position)
@@ -414,7 +415,10 @@ private fun VideoSurface(state: VideoState, path: String, modifier: Modifier) {
                 state.playing = false
                 state.position = state.duration
             }
-            vv.setOnErrorListener { _, _, _ -> state.failed = true; true }
+            vv.setOnErrorListener { _, what, extra ->
+                android.util.Log.e("VideoPlayer", "error what=$what extra=$extra")
+                state.failed = true; true
+            }
             mine[0] = vv
             state.view = vv
             FrameLayout(ctx).apply {

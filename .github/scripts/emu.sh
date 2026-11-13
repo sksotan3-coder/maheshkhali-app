@@ -22,3 +22,5 @@ echo "== Instrumented UI test"
 adb uninstall $PKG >/dev/null
 gradle connectedDebugAndroidTest --stacktrace
 echo UI_TEST_EXIT=$?
+echo "== Player log"
+adb logcat -d | grep -E "VideoPlayer|MediaPlayer|MediaCodec|VideoView|Codec2" | head -60
