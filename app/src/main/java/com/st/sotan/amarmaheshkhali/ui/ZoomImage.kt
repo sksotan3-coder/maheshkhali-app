@@ -39,7 +39,7 @@ fun ZoomImage(asset: String, description: String, modifier: Modifier = Modifier)
     val context = LocalContext.current
     val bitmap = remember(asset) {
         try {
-            context.assets.open("maps/$asset").use { BitmapFactory.decodeStream(it) }?.asImageBitmap()
+            context.assets.open(asset).use { BitmapFactory.decodeStream(it) }?.asImageBitmap()
         } catch (e: Exception) {
             android.util.Log.e("ZoomImage", "Cannot load $asset", e)
             null

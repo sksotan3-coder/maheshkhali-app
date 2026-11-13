@@ -110,4 +110,15 @@ class SmokeTest {
         rule.onAllNodesWithText("মহেশখালী উপজেলা মানচিত্র", substring = true).onFirst().performClick()
         waitForText("জুম করতে")
     }
+
+    @Test
+    fun photoRecordOpens() {
+        waitForText("AMAR MOHESHKHALI A TO Z")
+        rule.onNodeWithText("সার্চ").performClick()
+        waitForText("অফলাইন সার্চ")
+        rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("সূর্যাস্তে একটি রিসোর্ট")
+        waitForText("সূর্যাস্তে একটি রিসোর্ট")
+        rule.onAllNodesWithText("সূর্যাস্তে একটি রিসোর্ট", substring = true).onFirst().performClick()
+        waitForText("১২/১২")
+    }
 }

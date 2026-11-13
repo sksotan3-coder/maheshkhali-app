@@ -23,7 +23,7 @@ interface RecordDao {
                       WHEN recordId LIKE 'edu-madrasa-%' THEN 2
                       ELSE 1 END,
                  CASE WHEN recordId LIKE '%-list' THEN 0 ELSE 1 END,
-                 banglaName
+                 CASE WHEN recordId LIKE 'photo-%' THEN recordId ELSE banglaName END
         """
     )
     fun search(q: String, category: String, unionId: String): Flow<List<RecordEntity>>

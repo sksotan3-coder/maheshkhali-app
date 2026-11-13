@@ -1,5 +1,6 @@
 package com.st.sotan.amarmaheshkhali.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,9 +24,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -33,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.st.sotan.amarmaheshkhali.data.RecordEntity
 import com.st.sotan.amarmaheshkhali.data.categoryName
 import com.st.sotan.amarmaheshkhali.data.unionName
+import android.graphics.BitmapFactory
 import java.util.Locale
 
 fun localNumber(n: Int, lang: String): String =
@@ -86,7 +93,9 @@ fun RecordCard(r: RecordEntity, lang: String, onClick: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
-        Column(Modifier.padding(16.dp)) {
+        Column {
+            PhotoThumb(r)
+            Column(Modifier.padding(16.dp)) {
             Text(
                 if (lang == "bn") r.banglaName else r.englishName,
                 style = MaterialTheme.typography.titleMedium,
@@ -109,8 +118,37 @@ fun RecordCard(r: RecordEntity, lang: String, onClick: () -> Unit) {
                     Text(unionName(r.unionId, lang), style = MaterialTheme.typography.labelMedium)
                 }
             }
+            }
         }
     }
+}
+
+/** Photo shown on top of a gallery card (only for records whose image lives in assets/photos/). */
+@Composable
+private fun PhotoThumb(r: RecordEntity) {
+    val path = r.phone.lineSequence()
+        .map { it.split("|") }
+        .firstOrNull { it.size == 3 && it[0] == "image" && it[2].startsWith("photos/") }
+        ?.get(2) ?: return
+    val context = LocalContext.current
+    val bmp = remember(path) {
+        try {
+            val opts = BitmapFactory.Options().apply { inSampleSize = 1 }
+            context.assets.open(path).use { BitmapFactory.decodeStream(it, null, opts) }?.asImageBitmap()
+        } catch (e: Exception) {
+            android.util.Log.e("PhotoThumb", "Cannot load $path", e)
+            null
+        }
+    } ?: return
+    Image(
+        bitmap = bmp,
+        contentDescription = r.banglaName,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(190.dp)
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+    )
 }
 
 @Composable
