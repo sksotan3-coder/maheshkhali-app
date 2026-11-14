@@ -40,6 +40,11 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
@@ -137,7 +142,7 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                val desc = if (lang == "bn") r.descriptionBn else r.descriptionEn
+                val desc = if (lang == "bn") r.descriptionBn else r.descriptionEn.ifBlank { r.descriptionBn }
                 if (desc.isNotBlank()) {
                     FormattedDescription(desc)
                 }
@@ -165,7 +170,7 @@ fun DetailScreen(vm: AppViewModel, id: String, onBack: () -> Unit) {
                     Spacer(Modifier.height(12.dp))
                     SectionLabel(tr("যোগাযোগ", "Contact"))
                     contacts.forEach { c ->
-                        ContactButton(c, lang) { openContact(context, c) }
+                        ContactButton(c, lang) { openContact(context, c, lang) }
                     }
                 }
             }
@@ -306,6 +311,8 @@ fun FavouritesScreen(vm: AppViewModel, onOpen: (String) -> Unit) {
 fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit) {
     val lang by vm.lang.collectAsState()
     val theme by vm.theme.collectAsState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Column(Modifier.fillMaxSize()) {
         AppTopBar(tr("সেটিংস", "Settings"))
@@ -323,6 +330,51 @@ fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit) {
             RadioRow(tr("সিস্টেম অনুযায়ী", "Follow system"), theme == "system") { vm.setTheme("system") }
             RadioRow(tr("লাইট", "Light"), theme == "light") { vm.setTheme("light") }
             RadioRow(tr("ডার্ক", "Dark"), theme == "dark") { vm.setTheme("dark") }
+
+            Spacer(Modifier.height(16.dp))
+            SettingTitle(tr("প্রিয় তালিকার ব্যাকআপ", "Favourites Backup"))
+            Text(
+                tr(
+                    "ফোন বদলালে বা অ্যাপ মুছলে প্রিয় তালিকা হারিয়ে যায়। আগে থেকে সংরক্ষণ করে রাখুন।",
+                    "Your favourites are lost if you change phone or uninstall the app. Save them first."
+                ),
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(Modifier.height(6.dp))
+            OutlinedButton(
+                onClick = {
+                    scope.launch {
+                        val text = vm.favouritesBackupText()
+                        if (text.isEmpty()) {
+                            Toast.makeText(context, tr0(lang, "প্রিয় তালিকা খালি, আগে কিছু প্রিয় করুন।", "Your favourites list is empty."), Toast.LENGTH_LONG).show()
+                        } else {
+                            val send = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                putExtra(Intent.EXTRA_TEXT, text)
+                            }
+                            try {
+                                context.startActivity(Intent.createChooser(send, tr0(lang, "প্রিয় তালিকা সংরক্ষণ", "Save favourites")))
+                            } catch (e: Exception) {
+                                Toast.makeText(context, tr0(lang, "শেয়ার করার কোনো অ্যাপ পাওয়া যায়নি।", "No app found to share with."), Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text(tr("প্রিয় তালিকা সংরক্ষণ / শেয়ার", "Save / share favourites")) }
+            OutlinedButton(
+                onClick = {
+                    scope.launch {
+                        val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
+                        val text = cm?.primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(context)?.toString().orEmpty()
+                        val n = vm.restoreFavourites(text)
+                        val msg = if (n > 0) tr0(lang, "$n টি প্রিয় তথ্য ফিরে এসেছে।", "$n favourites restored.")
+                        else tr0(lang, "ক্লিপবোর্ডে ব্যাকআপের লেখা পাওয়া যায়নি। আগে সংরক্ষিত পুরো লেখাটি কপি করুন।", "No backup text found on the clipboard. Copy the whole saved text first.")
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) { Text(tr("কপি করা ব্যাকআপ থেকে ফিরিয়ে আনুন", "Restore from copied backup")) }
 
             Spacer(Modifier.height(16.dp))
             SettingTitle(tr("অ্যাপ তথ্য", "App Information"))
@@ -466,7 +518,7 @@ fun parseContacts(raw: String): List<Contact> =
 private fun toBanglaDigits(s: String): String =
     s.map { if (it in '0'..'9') ('\u09E6' + (it - '0')) else it }.joinToString("")
 
-private fun openContact(context: android.content.Context, c: Contact) {
+private fun openContact(context: android.content.Context, c: Contact, lang: String) {
     val uri = when (c.type) {
         "call" -> Uri.parse("tel:" + c.value.filter { it.isDigit() || it == '+' })
         "mail" -> Uri.parse("mailto:" + c.value)
@@ -476,7 +528,12 @@ private fun openContact(context: android.content.Context, c: Contact) {
     try {
         context.startActivity(Intent(action, uri))
     } catch (e: Exception) {
-        // No app can handle it; do nothing.
+        val msg = when (c.type) {
+            "call" -> if (lang == "bn") "ফোন করার কোনো অ্যাপ পাওয়া যায়নি।" else "No phone app found."
+            "mail" -> if (lang == "bn") "ইমেইল পাঠানোর কোনো অ্যাপ পাওয়া যায়নি।" else "No email app found."
+            else -> if (lang == "bn") "লিংকটি খোলার জন্য ব্রাউজার পাওয়া যায়নি।" else "No browser found to open this link."
+        }
+        android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_LONG).show()
     }
 }
 
@@ -551,3 +608,5 @@ private fun FormattedDescription(text: String) {
         }
     }
 }
+
+private fun tr0(lang: String, bn: String, en: String) = if (lang == "bn") bn else en

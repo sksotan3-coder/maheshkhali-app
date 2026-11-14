@@ -17,6 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
@@ -80,10 +85,11 @@ fun AppRoot(vm: AppViewModel) {
                         }
                     }
                 ) { padding ->
+                    Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                     NavHost(
                         navController = nav,
                         startDestination = "home",
-                        modifier = Modifier.padding(padding)
+                        modifier = Modifier.fillMaxHeight().widthIn(max = 900.dp)
                     ) {
                         composable("home") {
                             HomeScreen(
@@ -123,6 +129,7 @@ fun AppRoot(vm: AppViewModel) {
                         composable("favourites") { FavouritesScreen(vm) { nav.go("detail/$it") } }
                         composable("settings") { SettingsScreen(vm) { nav.go("about") } }
                         composable("about") { AboutScreen { nav.popBackStack() } }
+                    }
                     }
                 }
             }

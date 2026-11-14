@@ -16,7 +16,12 @@ interface RecordDao {
                        OR englishName LIKE '%' || :q || '%' ESCAPE '\'
                        OR descriptionBn LIKE '%' || :q || '%' ESCAPE '\'
                        OR descriptionEn LIKE '%' || :q || '%' ESCAPE '\'
-                       OR village LIKE '%' || :q || '%' ESCAPE '\')
+                       OR village LIKE '%' || :q || '%' ESCAPE '\'
+                       OR banglaName LIKE '%' || :q2 || '%' ESCAPE '\'
+                       OR englishName LIKE '%' || :q2 || '%' ESCAPE '\'
+                       OR descriptionBn LIKE '%' || :q2 || '%' ESCAPE '\'
+                       OR descriptionEn LIKE '%' || :q2 || '%' ESCAPE '\'
+                       OR village LIKE '%' || :q2 || '%' ESCAPE '\')
           AND (:category = '' OR category = :category)
           AND (:unionId = '' OR unionId = :unionId)
         ORDER BY CASE WHEN recordId LIKE 'edu-college-%' THEN 0
@@ -26,7 +31,13 @@ interface RecordDao {
                  CASE WHEN recordId LIKE 'photo-%' THEN recordId ELSE banglaName END
         """
     )
-    fun search(q: String, category: String, unionId: String): Flow<List<RecordEntity>>
+    fun search(q: String, q2: String, category: String, unionId: String): Flow<List<RecordEntity>>
+
+    @Query("SELECT * FROM records WHERE isFavourite = 1 ORDER BY banglaName")
+    suspend fun favouritesNow(): List<RecordEntity>
+
+    @Query("UPDATE records SET isFavourite = 1 WHERE recordId IN (:ids)")
+    suspend fun markFavourites(ids: List<String>): Int
 
     @Query("SELECT * FROM records WHERE recordId = :id")
     fun byId(id: String): Flow<RecordEntity?>

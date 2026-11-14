@@ -52,6 +52,7 @@ class SmokeTest {
         // Settings tab and About screen
         rule.onNodeWithText("সেটিংস").performClick()
         waitForText("ভাষা")
+        waitForText("প্রিয় তালিকার ব্যাকআপ")
         rule.onNodeWithText("অ্যাপ সম্পর্কে").performScrollTo().performClick()
         waitForText("Developed By: ST SOTAN")
         waitForText("© 2026 ST SOTAN")
@@ -120,5 +121,15 @@ class SmokeTest {
         waitForText("সূর্যাস্তে একটি রিসোর্ট")
         rule.onAllNodesWithText("সূর্যাস্তে একটি রিসোর্ট", substring = true).onFirst().performClick()
         waitForText("১২/১২")
+    }
+
+    @Test
+    fun searchFindsEnglishDigitsForBanglaData() {
+        waitForText("AMAR MOHESHKHALI")
+        rule.onNodeWithText("সার্চ").performClick()
+        waitForText("অফলাইন সার্চ")
+        // EIIN numbers are stored in Bangla digits; typing them with English digits must still work.
+        rule.onNodeWithText("নাম বা বিবরণ লিখুন").performTextInput("106372")
+        waitForText("মহেশখালী কলেজ")
     }
 }

@@ -16,8 +16,8 @@ import org.json.JSONObject
 object Seeder {
 
     /** Shown in Settings only. */
-    const val DATA_VERSION = "0.4.0"
-    const val DATA_DATE = "2026-11-11"
+    const val DATA_VERSION = "0.5.0"
+    const val DATA_DATE = "2026-11-14"
 
     private const val PREF_KEY = "seed_app_version"
 

@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.st.sotan.amarmaheshkhali.data.FavouritesBackup
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AppViewModel(private val app: Application) : AndroidViewModel(app) {
@@ -47,7 +49,7 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
 
     val results: StateFlow<List<RecordEntity>> =
         combine(query, category, union) { q, c, u -> Triple(q.trim(), c, u) }
-            .flatMapLatest { (q, c, u) -> dao.search(escapeLike(q), c, u) }
+            .flatMapLatest { (q, c, u) -> dao.search(escapeLike(q), escapeLike(otherDigits(q)), c, u) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val favourites: StateFlow<List<RecordEntity>> =
@@ -63,7 +65,7 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
 
     /** Records of one category and/or union (used by the list screen). */
     fun listResults(category: String, union: String): Flow<List<RecordEntity>> =
-        dao.search("", category, union)
+        dao.search("", "", category, union)
 
     fun toggleFavourite(r: RecordEntity) {
         viewModelScope.launch(Dispatchers.IO) { dao.setFavourite(r.recordId, !r.isFavourite) }
@@ -73,11 +75,28 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch(Dispatchers.IO) { dao.touch(id, System.currentTimeMillis()) }
     }
 
+    /** True only if the bundled data could not be loaded (shown to the user on the home screen). */
+    val seedFailed = MutableStateFlow(false)
+
+    /** Text the user can save/share to keep a backup of the favourite list. Empty if there are none. */
+    suspend fun favouritesBackupText(): String = withContext(Dispatchers.IO) {
+        FavouritesBackup.build(dao.favouritesNow())
+    }
+
+    /** Restore favourites from a backup text. Returns how many were restored (0 if the text is not a backup). */
+    suspend fun restoreFavourites(text: String): Int = withContext(Dispatchers.IO) {
+        val ids = FavouritesBackup.parseIds(text)
+        var n = 0
+        ids.chunked(500).forEach { n += dao.markFavourites(it) }
+        n
+    }
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Seeder.seedIfNeeded(app, db)
             } catch (e: Exception) {
+                seedFailed.value = true
                 // Never crash the app because of a data problem; keep whatever data is already stored.
                 Log.e("Seeder", "Could not load bundled data", e)
             }
@@ -86,5 +105,18 @@ class AppViewModel(private val app: Application) : AndroidViewModel(app) {
 }
 
 /** Make a typed search text safe for SQL LIKE (so "%" and "_" are plain characters). */
+/** Same text with its digits written in the other script (1090 <-> ১০৯০), so both spellings find the same records. */
+private fun otherDigits(q: String): String {
+    val hasAscii = q.any { it in '0'..'9' }
+    val hasBangla = q.any { it in '\u09E6'..'\u09EF' }
+    return q.map {
+        when {
+            hasAscii && it in '0'..'9' -> '\u09E6' + (it - '0')
+            hasBangla && it in '\u09E6'..'\u09EF' -> '0' + (it - '\u09E6')
+            else -> it
+        }
+    }.joinToString("")
+}
+
 private fun escapeLike(q: String): String =
     q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")

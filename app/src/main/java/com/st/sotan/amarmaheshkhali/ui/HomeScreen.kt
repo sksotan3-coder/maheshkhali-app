@@ -48,6 +48,7 @@ fun HomeScreen(
 ) {
     val lang by vm.lang.collectAsState()
     val counts by vm.counts.collectAsState()
+    val seedFailed by vm.seedFailed.collectAsState()
     val countMap = remember(counts) { counts.associate { it.category to it.total } }
 
     Column {
@@ -82,6 +83,25 @@ fun HomeScreen(
                             )
                         }
                     }
+                }
+            }
+
+            if (seedFailed) {
+                item {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                    ) {
+                        Text(
+                            tr(
+                                "তথ্য লোড করা যায়নি। অ্যাপটি পুরোপুরি বন্ধ করে আবার খুলুন। সমস্যা থাকলে ফোনের স্টোরেজে জায়গা আছে কিনা দেখুন।",
+                                "Could not load the data. Close the app completely and open it again. If it continues, check that your phone has free storage."
+                            ),
+                            modifier = Modifier.padding(16.dp),
+                            color = MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    }
+                    Spacer(Modifier.height(12.dp))
                 }
             }
 
