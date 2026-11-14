@@ -274,8 +274,9 @@
   "status": "PENDING",
   "updated": "",
   "source": "",
-  "descBn": "",
-  "descEn": ""
+  "descBn": "দুর্যোগ ও আবহাওয়া সতর্কবার্তা\n* সেবার নাম: জাতীয় দুর্যোগ সতর্কবার্তা সেবা\n* জরুরি যোগাযোগ নম্বর: ১০৯০\n\n## সেবার বিবরণ\nঘূর্ণিঝড়, বন্যা, জলোচ্ছ্বাস, অতিবৃষ্টি ও অন্যান্য প্রাকৃতিক দুর্যোগের আগাম সতর্কবার্তা এবং প্রয়োজনীয় তথ্য জানতে ১০৯০ নম্বরে যোগাযোগ করুন।\n\n## বিশেষ নির্দেশনা\nদুর্যোগের সতর্কবার্তা পেলে দ্রুত নিরাপদ স্থানে আশ্রয় নিন এবং সরকারি নির্দেশনা অনুসরণ করুন।",
+  "descEn": "Disaster and weather warnings\n* Service name: National Disaster Warning Service\n* Emergency contact number: 1090\n\n## About the service\nTo get early warnings and necessary information about cyclones, floods, storm surges, heavy rain and other natural disasters, call 1090.\n\n## Special instructions\nWhen you receive a disaster warning, quickly take shelter in a safe place and follow government instructions.",
+  "phone": "call|১০৯০ নম্বরে কল করুন|1090"
  },
  {
   "id": "emg-ambulance",
@@ -289,17 +290,6 @@
   "descEn": "মহেশখালী উপজেলা স্বাস্থ্য কমপ্লেক্স",
   "address": "মহেশখালী, কক্সবাজার",
   "phone": "call|জরুরি বিভাগ|01730324468\ncall|অ্যাম্বুলেন্স অনুসন্ধান|16263\ncall|অ্যাম্বুলেন্স অনুসন্ধান (জাতীয় জরুরি)|999"
- },
- {
-  "id": "emg-grievance",
-  "bn": "সরকারি অভিযোগ ও তথ্যসেবা",
-  "en": "Government Grievance and Information Service",
-  "cat": "emergency",
-  "status": "PENDING",
-  "updated": "",
-  "source": "",
-  "descBn": "",
-  "descEn": ""
  },
  {
   "id": "emg-999",
