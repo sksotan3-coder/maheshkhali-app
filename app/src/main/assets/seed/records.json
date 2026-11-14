@@ -163,17 +163,6 @@
   "phone": "call|অফিসার ইনচার্জ (ওসি)|01320108627\ncall|ওসির বিকল্প মোবাইল|01713373669\ncall|ডিউটি অফিসার|01320108632\nweb|সরকারি জাতীয় পোর্টাল (কক্সবাজার)|https://coxsbazar.gov.bd"
  },
  {
-  "id": "gov-land-office",
-  "bn": "ভূমি অফিস",
-  "en": "Land Office",
-  "cat": "government_offices",
-  "status": "PENDING",
-  "updated": "",
-  "source": "",
-  "descBn": "",
-  "descEn": ""
- },
- {
   "id": "gov-agri-office",
   "bn": "উপজেলা কৃষি অফিস",
   "en": "Upazila Agriculture Office",

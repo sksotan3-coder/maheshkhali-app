@@ -75,8 +75,8 @@ fun HomeScreen(
                             Spacer(Modifier.height(8.dp))
                             Text(
                                 tr(
-                                    "মহেশখালী বাংলাদেশের কক্সবাজার জেলার একটি উপজেলা। এই অ্যাপটি সম্পূর্ণ অফলাইন তথ্যভান্ডার।",
-                                    "Maheshkhali is an upazila of Cox's Bazar District, Bangladesh. This app is a fully offline information encyclopedia."
+                                    "মহেশখালী বাংলাদেশের কক্সবাজার জেলার একটি অপরূপ উপজেলা। প্রাকৃতিক সৌন্দর্য, ইতিহাস ও ঐতিহ্যে সমৃদ্ধ।",
+                                    "Maheshkhali is a beautiful upazila of Cox's Bazar District, Bangladesh, rich in natural beauty, history and heritage."
                                 ),
                                 color = MaterialTheme.colorScheme.onPrimaryContainer
                             )

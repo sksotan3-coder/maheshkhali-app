@@ -48,7 +48,6 @@ val CATEGORIES = listOf(
     CategoryInfo("transport", "সড়ক ও পরিবহন", "Roads and Transport"),
     CategoryInfo("boat_routes", "নৌপথ ও ঘাট", "Boat Routes and Jetties"),
     CategoryInfo("news_archive", "স্থানীয় সংবাদ আর্কাইভ", "Local News Archive"),
-    CategoryInfo("notices", "সরকারি বিজ্ঞপ্তি", "Government Notices"),
     CategoryInfo("maps", "অফলাইন মানচিত্র", "Offline Maps"),
     CategoryInfo("photos", "ফটো গ্যালারি", "Photo Gallery"),
     CategoryInfo("videos", "ভিডিও গ্যালারি", "Video Gallery")
