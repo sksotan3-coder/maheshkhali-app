@@ -308,7 +308,7 @@ fun FavouritesScreen(vm: AppViewModel, onOpen: (String) -> Unit) {
 
 // ------------------------------------------------------------ Settings
 @Composable
-fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit) {
+fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit, onPrivacy: () -> Unit = {}) {
     val lang by vm.lang.collectAsState()
     val theme by vm.theme.collectAsState()
     val context = LocalContext.current
@@ -398,6 +398,7 @@ fun SettingsScreen(vm: AppViewModel, onAbout: () -> Unit) {
             )
             Spacer(Modifier.height(12.dp))
             Button(onClick = onAbout) { Text(tr("অ্যাপ সম্পর্কে", "About the app")) }
+            OutlinedButton(onClick = onPrivacy) { Text(tr("গোপনীয়তা নীতি", "Privacy Policy")) }
         }
     }
 }
@@ -424,6 +425,62 @@ private fun RadioRow(label: String, selected: Boolean, onSelect: () -> Unit) {
         RadioButton(selected = selected, onClick = null)
         Spacer(Modifier.padding(horizontal = 6.dp))
         Text(label)
+    }
+}
+
+// ------------------------------------------------------------ Privacy Policy
+private val PRIVACY_BN = listOf(
+    "সংক্ষেপে" to "AMAR MOHESHKHALI একটি সম্পূর্ণ অফলাইন অ্যাপ। এটি আপনার কোনো ব্যক্তিগত তথ্য সংগ্রহ করে না, কোথাও পাঠায় না এবং কারও সঙ্গে শেয়ার করে না।",
+    "আমরা কী সংগ্রহ করি না" to "নাম, ফোন নম্বর, ইমেইল, ঠিকানা, লোকেশন, ছবি, ক্যামেরা, মাইক্রোফোন, কন্টাক্ট বা ফাইল কিছুই সংগ্রহ করা হয় না। অ্যাপে লগইন বা অ্যাকাউন্ট নেই। বিজ্ঞাপন, অ্যানালিটিক্স বা ট্র্যাকিং কোনো কিছু নেই।",
+    "ইন্টারনেট" to "অ্যাপে ইন্টারনেটের অনুমতিই নেই। তাই অ্যাপ নিজে থেকে কোনো তথ্য ইন্টারনেটে পাঠাতে বা আনতে পারে না। সব তথ্য অ্যাপের ভেতরেই আছে।",
+    "ফোনে যা সংরক্ষিত থাকে" to "আপনার প্রিয় তালিকা, ভাষা ও থিমের পছন্দ এবং সম্প্রতি দেখা তথ্য শুধু আপনার ফোনের ভেতরে থাকে। অ্যাপ মুছে ফেললে এগুলোও মুছে যায়। আমরা এগুলো দেখতে পাই না।",
+    "আপনি চাইলে যা ঘটে" to "• \"প্রিয় তালিকা সংরক্ষণ / শেয়ার\" চাপলে প্রিয় তালিকার লেখা আপনার বেছে নেওয়া অ্যাপে (যেমন হোয়াটসঅ্যাপ) যায়। এটি শুধু আপনার নির্দেশে হয়।\n• \"কপি করা ব্যাকআপ থেকে ফিরিয়ে আনুন\" চাপলেই কেবল ক্লিপবোর্ড পড়া হয়, তার আগে কখনো নয়।\n• ফোন, ইমেইল বা ওয়েবসাইটের বাটন চাপলে ফোনের নিজস্ব অ্যাপ খোলে। ওয়েবসাইট দেখতে ইন্টারনেট লাগে এবং সেটি ঐ ওয়েবসাইটের নিজস্ব নীতিতে চলে।",
+    "শিশুদের তথ্য" to "অ্যাপটি কোনো ব্যক্তির, শিশুসহ, তথ্য সংগ্রহ করে না।",
+    "তথ্যের উৎস সম্পর্কে" to "অ্যাপের তথ্য সাধারণ জানার জন্য। জরুরি সিদ্ধান্তের আগে সংশ্লিষ্ট দপ্তরের সঙ্গে নিশ্চিত হয়ে নিন।",
+    "নীতি পরিবর্তন" to "ভবিষ্যতে এই নীতি বদলালে নতুন অ্যাপ সংস্করণে এই পাতায় জানানো হবে।",
+    "যোগাযোগ" to "প্রশ্ন থাকলে প্লে স্টোরে অ্যাপের পাতায় দেওয়া ডেভেলপারের যোগাযোগ ব্যবহার করুন। ডেভেলপার: ST SOTAN।"
+)
+
+private val PRIVACY_EN = listOf(
+    "In short" to "AMAR MOHESHKHALI is a fully offline app. It does not collect, send or share any of your personal information.",
+    "What we do not collect" to "No name, phone number, email, address, location, photos, camera, microphone, contacts or files are collected. There is no login or account. There are no ads, analytics or tracking.",
+    "Internet" to "The app does not have the internet permission, so it cannot send or fetch any data by itself. All information is bundled inside the app.",
+    "What stays on your phone" to "Your favourites, language and theme choice and recently viewed items stay only on your phone. They are removed when you uninstall the app. We cannot see them.",
+    "What happens only when you ask" to "• \"Save / share favourites\" sends the favourites text to the app you choose (for example WhatsApp). This happens only on your command.\n• The clipboard is read only when you press \"Restore from copied backup\", never before.\n• Phone, email and website buttons open your phone's own apps. Opening a website needs internet and is governed by that website's own policy.",
+    "Children" to "The app does not collect information from anyone, including children.",
+    "About the information" to "The information is for general guidance. Please confirm with the relevant office before important decisions.",
+    "Changes to this policy" to "If this policy changes, it will be updated on this page in a new app version.",
+    "Contact" to "For questions, use the developer contact shown on the app's Play Store page. Developer: ST SOTAN."
+)
+
+@Composable
+fun PrivacyScreen(onBack: () -> Unit) {
+    val items = if (LocalLang.current == "bn") PRIVACY_BN else PRIVACY_EN
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(tr("গোপনীয়তা নীতি", "Privacy Policy"), onBack)
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+        ) {
+            Text(
+                "AMAR MOHESHKHALI",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+            for ((h, b) in items) {
+                Spacer(Modifier.height(16.dp))
+                SettingTitle(h)
+                Spacer(Modifier.height(4.dp))
+                Text(b, style = MaterialTheme.typography.bodyMedium)
+            }
+            Spacer(Modifier.height(24.dp))
+            Text(
+                "© 2026 ST SOTAN. All Rights Reserved.",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            )
+        }
     }
 }
 

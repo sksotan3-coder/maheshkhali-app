@@ -34,6 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.st.sotan.amarmaheshkhali.ui.AboutScreen
+import com.st.sotan.amarmaheshkhali.ui.PrivacyScreen
 import com.st.sotan.amarmaheshkhali.ui.AppTheme
 import com.st.sotan.amarmaheshkhali.ui.DetailScreen
 import com.st.sotan.amarmaheshkhali.ui.FavouritesScreen
@@ -128,7 +129,8 @@ fun AppRoot(vm: AppViewModel) {
                         }
                         composable("search") { SearchScreen(vm) { nav.go("detail/$it") } }
                         composable("favourites") { FavouritesScreen(vm) { nav.go("detail/$it") } }
-                        composable("settings") { SettingsScreen(vm) { nav.go("about") } }
+                        composable("settings") { SettingsScreen(vm, onAbout = { nav.go("about") }, onPrivacy = { nav.go("privacy") }) }
+                        composable("privacy") { PrivacyScreen { nav.popBackStack() } }
                         composable("about") { AboutScreen { nav.popBackStack() } }
                     }
                     }

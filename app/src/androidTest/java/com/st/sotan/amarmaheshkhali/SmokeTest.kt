@@ -60,6 +60,16 @@ class SmokeTest {
     }
 
     @Test
+    fun privacyPolicyOpens() {
+        waitForText("AMAR MOHESHKHALI")
+        rule.onNodeWithText("সেটিংস").performClick()
+        waitForText("প্রিয় তালিকার ব্যাকআপ")
+        rule.onNodeWithText("গোপনীয়তা নীতি").performScrollTo().performClick()
+        waitForText("সংক্ষেপে")
+        waitForText("© 2026 ST SOTAN")
+    }
+
+    @Test
     fun favouritesAndHome() {
         waitForText("AMAR MOHESHKHALI")
         rule.onNodeWithText("প্রিয়").performClick()
